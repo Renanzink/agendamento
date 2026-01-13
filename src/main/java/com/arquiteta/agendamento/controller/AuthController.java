@@ -28,6 +28,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> dados, HttpServletRequest request, HttpServletResponse response) {
+        //refatorar essa classe e colocar a Autenticacao utilizando JWT e OAUTH2. Retornando o token e podendo utilizar ele.
+
         try {
             String login = dados.get("login").trim();
             String senha = dados.get("senha").trim();

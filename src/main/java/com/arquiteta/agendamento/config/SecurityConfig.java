@@ -50,6 +50,7 @@ public class SecurityConfig {
                         // CORREÇÃO: Libera a criação de agendamento para o público
                         .requestMatchers(HttpMethod.POST, "/api/agendamentos").permitAll()
                         // Protege o painel administrativo
+                        //precisa criar a classe de roles ou verificar como colocar uma role default com usuario e senha
                         .requestMatchers("/admin.html").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
