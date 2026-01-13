@@ -33,10 +33,10 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* NAVBAR - AJUSTADA PARA LOGO MAIOR */
+        /* NAVBAR */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 8%; height: 160px; /* Aumentado para acomodar a logo */
+            padding: 0 8%; height: 160px;
             background-color: transparent;
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
             transition: var(--transition);
@@ -47,11 +47,10 @@
             backdrop-filter: blur(10px); border-bottom: 1px solid rgba(176, 94, 65, 0.1);
         }
 
-        /* LOGO PROJETO 6 - TAMANHO AMPLIADO */
         .nav-logo-img {
-            height: 240px; /* Quase o dobro do tamanho anterior */
+            height: 240px;
             width: auto;
-            border-radius: 12px; /* Menos arredondado para parecer um quadro */
+            border-radius: 12px;
             border: 2px solid var(--accent);
             transition: var(--transition);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -135,7 +134,7 @@
         }
         button.btn-enviar:hover { background: var(--accent); }
 
-        /* RODAPÉ (FOOTER) */
+        /* FOOTER */
         footer { background-color: var(--primary); color: #fff; padding: 80px 8% 40px; }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; max-width: 1300px; margin: 0 auto; }
         .footer-logo h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 20px; }
@@ -209,6 +208,7 @@
                     <option value="Consultoria">Consultoria Técnica</option>
                     <option value="Projeto Completo">Projeto Residencial</option>
                     <option value="Design de Interiores">Design de Interiores</option>
+                    <option value="Projeto comercial">Projeto comercial</option>
                 </select>
                 <div style="display: flex; gap: 20px;">
                     <div style="flex: 1;">
@@ -252,20 +252,18 @@
 </footer>
 
 <script>
-    // Efeito de Reveal no Scroll e Navbar
+    // Efeito de Scroll
     window.addEventListener('scroll', () => {
         const text = document.getElementById('reveal-text');
         const navbar = document.getElementById('navbar');
-
-        // Navbar shrink
         window.scrollY > 80 ? navbar.classList.add('shrink') : navbar.classList.remove('shrink');
-
-        // Reveal text
-        const position = text.getBoundingClientRect().top;
-        if(position < window.innerHeight - 100) text.classList.add('reveal');
+        if(text) {
+            const position = text.getBoundingClientRect().top;
+            if(position < window.innerHeight - 100) text.classList.add('reveal');
+        }
     });
 
-    // Máscara WhatsApp
+    // Máscara de Telefone
     document.getElementById('contato').addEventListener('input', (e) => {
         let v = e.target.value.replace(/\D/g, "");
         if (v.length > 0) v = "(" + v;
@@ -274,7 +272,7 @@
         e.target.value = v;
     });
 
-    // Envio do Formulário (Lógica Fetch original mantida)
+    // Envio do Formulário
     document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const overlay = document.getElementById('loader-overlay');
@@ -294,6 +292,13 @@
                 body: JSON.stringify(payload)
             });
 
+            // Lógica robusta para ler a resposta apenas se for JSON
+            let dataRes = {};
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                dataRes = await res.json();
+            }
+
             if(res.ok) {
                 Swal.fire({
                     title: 'Recebemos seu contato!',
@@ -307,16 +312,34 @@
                     if (result.isConfirmed) {
                         const dataF = new Date(payload.dataHora).toLocaleString('pt-BR');
                         var texto = `Olá Emylle! ✨ Acabei de solicitar uma consultoria pelo site:\n\n👤 *Nome:* ${payload.nomeCliente}\n💼 *Serviço:* ${payload.tipoServico}\n📅 *Data:* ${dataF}\n\n Aguardo seu retorno!`;
-                        window.open(`https://api.whatsapp.com/send?phone=557391360438&text=${encodeURIComponent(texto)}`, '_blank');
+                        window.open(`https://api.whatsapp.com/send?phone=5573991360438&text=${encodeURIComponent(texto)}`, '_blank');
                     }
                 });
                 this.reset();
             } else {
-                const erroData = await res.json();
-                Swal.fire({ title: 'Atenção', text: erroData.message || "Verifique os dados.", icon: 'warning' });
+                // Captura a mensagem de erro do Java (@Future ou customizada)
+                let msgErro = "Verifique os dados preenchidos.";
+
+                if (dataRes.errors && dataRes.errors.length > 0) {
+                    msgErro = dataRes.errors[0].defaultMessage; // Mensagem do @Future
+                } else if (dataRes.message) {
+                    msgErro = dataRes.message; // Mensagem manual do Controller
+                }
+
+                Swal.fire({
+                    title: 'Atenção',
+                    text: msgErro,
+                    icon: 'warning',
+                    confirmButtonColor: '#b05e41'
+                });
             }
         } catch (err) {
-            Swal.fire({ title: 'Erro', text: 'Tente novamente em instantes.', icon: 'error' });
+            console.error("Erro na requisição:", err);
+            Swal.fire({
+                title: 'Erro de Conexão',
+                text: 'Não conseguimos processar seu pedido. Tente novamente em instantes.',
+                icon: 'error'
+            });
         } finally {
             overlay.style.display = 'none';
         }
