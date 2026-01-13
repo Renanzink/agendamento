@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Restrito | Emylle Arq</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4a3728;
+            --accent: #b05e41;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+            url('/images/projeto7.jpeg') no-repeat center center/cover;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border-top: 6px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        .login-logo {
+            height: 150px;
+            width: auto;
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 0.75rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px; top: 16px;
+            color: var(--accent);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 8px rgba(176, 94, 65, 0.1); }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover { background: var(--accent); transform: translateY(-2px); }
+        button:disabled { background: #8e8e8e; cursor: not-allowed; }
+
+        .error-msg {
+            color: #d93025;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            display: none;
+            background: #fce8e6;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <img src="/images/projeto5.jpeg" alt="Logo Emylle Arq" class="login-logo">
+
+    <h2>Acesso Restrito</h2>
+    <p class="subtitle">Painel de Gestão</p>
+
+    <form id="loginForm">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" placeholder="Usuário" required autocomplete="username">
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Senha" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="btnEntrar">Entrar no Sistema</button>
+        <p id="error" class="error-msg"></p>
+    </form>
+
+    <a href="index.html" class="back-link"><i class="fas fa-chevron-left"></i> Voltar para o site</a>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const errorDisplay = document.getElementById('error');
+        const btn = document.getElementById('btnEntrar');
+        const login = document.getElementById('username').value;
+        const senha = document.getElementById('password').value;
+
+        errorDisplay.style.display = 'none';
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> VALIDANDO...';
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ login, senha }),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                // 1. Salva flag local
+                localStorage.setItem('sessao_emylle', 'ativa');
+
+                // 2. Pequeno delay para garantir que o cookie JSESSIONID seja processado pelo navegador
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 200);
+
+            } else {
+                errorDisplay.innerText = "Acesso negado. Verifique usuário e senha.";
+                errorDisplay.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = "Entrar no Sistema";
+            }
+        } catch (err) {
+            errorDisplay.innerText = "Erro ao conectar com o servidor.";
+            errorDisplay.style.display = 'block';
+            btn.disabled = false;
+            btn.innerText = "Entrar no Sistema";
+            console.error("Erro no login:", err);
+        }
+    });
+</script>
+</body>
+</html>

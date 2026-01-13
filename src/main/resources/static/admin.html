@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrativo | Emylle Arq</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4a3728;
+            --accent: #b05e41;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg); margin: 0; color: var(--primary); }
+
+        .top-bar {
+            background: var(--white); padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--white); padding: 25px; border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-left: 5px solid var(--accent);
+        }
+        .stat-card h3 { margin: 0; font-size: 0.8rem; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; margin: 10px 0; color: var(--primary); }
+
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; margin-top: 40px;
+        }
+        h2 { font-family: 'Playfair Display', serif; margin: 0; font-size: 1.6rem; }
+
+        .search-wrapper { position: relative; }
+        .search-wrapper i { position: absolute; left: 15px; top: 12px; color: #ccc; }
+        .search-box {
+            padding: 10px 15px 10px 40px; border: 1px solid #eee;
+            border-radius: 25px; width: 300px; outline: none; transition: 0.3s;
+        }
+        .search-box:focus { border-color: var(--accent); width: 350px; }
+
+        .table-container { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fafafa; padding: 15px; text-align: left; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #f8f8f8; font-size: 0.9rem; }
+        tr:hover { background-color: #fdfdfd; }
+
+        .actions { display: flex; gap: 8px; }
+        .btn-action {
+            padding: 8px 12px; border-radius: 6px; border: none;
+            cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.2s;
+        }
+        .btn-done { background: #e8f5e9; color: var(--success); }
+        .btn-done:hover { background: var(--success); color: white; }
+        .btn-del { background: #ffebee; color: var(--danger); }
+        .btn-del:hover { background: var(--danger); color: white; }
+
+        .btn-main {
+            background: var(--accent); color: white; border: none;
+            padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;
+        }
+        .btn-main:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="/images/projeto5.jpeg" style="height: 40px; border-radius: 5px;" alt="Logo" onerror="this.src='https://via.placeholder.com/40'">
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; margin: 0;">Gestão Emylle Arq</h1>
+    </div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button onclick="carregar()" class="btn-main"><i class="fas fa-sync-alt"></i> ATUALIZAR</button>
+        <button onclick="logout()" class="btn-action" style="background: #eee; color: #333;"><i class="fas fa-sign-out-alt"></i> SAIR</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Pendentes</h3>
+            <div class="value" id="count-pendentes">0</div>
+        </div>
+        <div class="stat-card" style="border-left-color: var(--success);">
+            <h3>Concluídos</h3>
+            <div class="value" id="count-concluidos">0</div>
+        </div>
+        <div class="stat-card" style="border-left-color: #2196f3;">
+            <h3>Próximo Cliente</h3>
+            <div class="value" id="next-client" style="font-size: 1.1rem; color: var(--accent);">-</div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <h2><i class="fas fa-calendar-alt" style="color: var(--accent);"></i> Próximos Atendimentos</h2>
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-box" placeholder="Filtrar por nome ou serviço..." onkeyup="filtrarTabela('tabela-pendentes', this.value)">
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Serviço</th>
+                <th>Data e Hora</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tabela-pendentes"></tbody>
+        </table>
+    </div>
+
+    <div class="section-header">
+        <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Histórico de Concluídos</h2>
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-box" placeholder="Pesquisar no histórico..." onkeyup="filtrarTabela('tabela-historico', this.value)">
+        </div>
+    </div>
+
+    <div class="table-container" style="margin-bottom: 50px;">
+        <table>
+            <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Serviço</th>
+                <th>Data e Hora</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="tabela-historico"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 1. Proteção de Login
+    if (localStorage.getItem('sessao_emylle') !== 'ativa') {
+        window.location.replace('login.html');
+    }
+
+    // Função de Busca em Tempo Real
+    function filtrarTabela(idTabela, termo) {
+        const filtro = termo.toLowerCase();
+        const rows = document.getElementById(idTabela).getElementsByTagName('tr');
+        for (let row of rows) {
+            row.style.display = row.innerText.toLowerCase().includes(filtro) ? "" : "none";
+        }
+    }
+
+    // 2. Carregar Dados do Servidor
+    async function carregar() {
+        const btn = document.querySelector('.btn-main');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ATUALIZANDO...';
+
+        try {
+            const res = await fetch('/api/agendamentos', { credentials: 'include' });
+
+            if (res.status === 401 || res.status === 403) {
+                logout();
+                return;
+            }
+
+            const dados = await res.json();
+            const tbodyPendentes = document.getElementById('tabela-pendentes');
+            const tbodyHistorico = document.getElementById('tabela-historico');
+
+            tbodyPendentes.innerHTML = '';
+            tbodyHistorico.innerHTML = '';
+
+            // Separação lógica baseada no campo 'status' do Banco de Dados
+            const pendentes = dados.filter(i => i.status === 'PENDENTE' || !i.status)
+                .sort((a,b) => new Date(a.dataHora) - new Date(b.dataHora));
+
+            const concluidos = dados.filter(i => i.status === 'CONCLUIDO')
+                .sort((a,b) => new Date(b.dataHora) - new Date(a.dataHora));
+
+            // Atualização dos Cards de Estatística
+            document.getElementById('count-pendentes').innerText = pendentes.length;
+            document.getElementById('count-concluidos').innerText = concluidos.length;
+            document.getElementById('next-client').innerText = pendentes.length > 0 ? pendentes[0].nomeCliente : "Sem agenda";
+
+            // Renderizar Pendentes
+            pendentes.forEach(item => {
+                const dataF = new Date(item.dataHora).toLocaleString('pt-BR');
+                tbodyPendentes.innerHTML += `
+                    <tr>
+                        <td><strong>${item.nomeCliente}</strong><br><small style="color:#888">${item.contato}</small></td>
+                        <td>${item.tipoServico}</td>
+                        <td>${dataF}</td>
+                        <td><span class="badge badge-pending">Pendente</span></td>
+                        <td class="actions">
+                            <button title="Concluir" onclick="acao(${item.id}, 'concluir', 'PATCH')" class="btn-action btn-done"><i class="fas fa-check"></i></button>
+                            <button title="Excluir" onclick="acao(${item.id}, 'excluir', 'DELETE')" class="btn-action btn-del"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+            });
+
+            // Renderizar Histórico
+            concluidos.forEach(item => {
+                const dataF = new Date(item.dataHora).toLocaleString('pt-BR');
+                tbodyHistorico.innerHTML += `
+                    <tr>
+                        <td><strong>${item.nomeCliente}</strong><br><small style="color:#888">${item.contato}</small></td>
+                        <td>${item.tipoServico}</td>
+                        <td>${dataF}</td>
+                        <td><span class="badge badge-success">Concluído</span></td>
+                    </tr>`;
+            });
+
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Erro', 'Não foi possível conectar ao servidor.', 'error');
+        } finally {
+            btn.innerHTML = originalText;
+        }
+    }
+
+    // 3. Função Unificada de Ação (PATCH para concluir, DELETE para excluir)
+    async function acao(id, tipo, metodo) {
+        const config = {
+                concluir: {
+                title: 'Marcar como Concluído?',
+                text: 'O cliente será movido para o histórico.',
+                icon: 'question',
+                url: `/api/agendamentos/${id}/concluir`
+            },
+            excluir: {
+                title: 'Excluir Agendamento?',
+                text: 'Esta ação não pode ser desfeita.',
+                icon: 'warning',
+                url: `/api/agendamentos/${id}`
+            }
+        };
+
+        const result = await Swal.fire({
+            title: config[tipo].title,
+            text: config[tipo].text,
+            icon: config[tipo].icon,
+            showCancelButton: true,
+            confirmButtonColor: tipo === 'excluir' ? '#dc3545' : '#28a745',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Confirmar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(config[tipo].url, { method: metodo, credentials: 'include' });
+                if (res.ok) {
+                    Swal.fire({ icon: 'success', title: 'Sucesso!', timer: 1000, showConfirmButton: false });
+                    carregar();
+                } else {
+                    Swal.fire('Erro', 'Ação não permitida.', 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', 'Falha na comunicação com o servidor.', 'error');
+            }
+        }
+    }
+
+    // 4. Logout
+    async function logout() {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        } catch (e) {}
+        localStorage.removeItem('sessao_emylle');
+        window.location.replace('login.html');
+    }
+
+    // Inicialização
+    window.onload = carregar;
+</script>
+</body>
+</html>

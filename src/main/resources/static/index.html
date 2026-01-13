@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <title>Emylle Arq & Interiores</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* CONFIGURAÇÕES GLOBAIS */
+        :root {
+            --primary: #4a3728;
+            --accent: #b05e41;
+            --text-muted: #8e8e8e;
+            --bg-soft: #FDF9F7;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; color: var(--primary); background-color: #fff; overflow-x: hidden; line-height: 1.6; }
+
+        /* LOADER */
+        #loader-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 2px solid #eee; border-top: 2px solid var(--accent);
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* NAVBAR - AJUSTADA PARA LOGO MAIOR */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 8%; height: 160px; /* Aumentado para acomodar a logo */
+            background-color: transparent;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            transition: var(--transition);
+        }
+
+        nav.shrink {
+            height: 90px; background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(176, 94, 65, 0.1);
+        }
+
+        /* LOGO PROJETO 6 - TAMANHO AMPLIADO */
+        .nav-logo-img {
+            height: 240px; /* Quase o dobro do tamanho anterior */
+            width: auto;
+            border-radius: 12px; /* Menos arredondado para parecer um quadro */
+            border: 2px solid var(--accent);
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        nav.shrink .nav-logo-img { height: 65px; }
+
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--primary); font-size: 0.75rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            position: relative; transition: 0.3s;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 1px; bottom: -5px;
+            left: 0; background-color: var(--accent); transition: 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        .btn-admin-link { border: 1px solid var(--accent) !important; padding: 8px 15px; border-radius: 4px; color: var(--accent) !important; }
+
+        /* HERO SECTION */
+        #home {
+            height: 100vh;
+            background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+            url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000') no-repeat center center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 400;
+            line-height: 1.1; margin-bottom: 20px; color: var(--primary);
+        }
+
+        .btn-hero {
+            margin-top: 40px; padding: 18px 45px; background-color: var(--accent);
+            color: white; text-decoration: none; font-weight: 600; border-radius: 2px;
+            letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;
+            transition: var(--transition); box-shadow: 0 10px 20px rgba(176, 94, 65, 0.2);
+        }
+        .btn-hero:hover { background-color: var(--primary); transform: translateY(-3px); }
+
+        /* HISTORIA */
+        #historia { background-color: var(--bg-soft); padding: 120px 15%; text-align: center; }
+        .history-text {
+            font-family: 'Playfair Display', serif; font-size: 2.8rem;
+            font-weight: 400; color: var(--primary); opacity: 0; transform: translateY(30px);
+            transition: 1s all ease;
+        }
+        .reveal { opacity: 1; transform: translateY(0); }
+
+        /* PORTFOLIO */
+        #portfolio { padding: 100px 5%; }
+        .grid-portfolio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .portfolio-item {
+            height: 550px; background-size: cover; background-position: center;
+            transition: var(--transition); filter: grayscale(0.3); cursor: pointer;
+            overflow: hidden; position: relative;
+        }
+        .portfolio-item:hover { filter: grayscale(0); transform: scale(0.98); }
+
+        /* AGENDAMENTO */
+        #agendamento { background-color: #fff; padding: 120px 8%; }
+        .agendamento-container { display: flex; gap: 80px; align-items: center; max-width: 1300px; margin: 0 auto; }
+        .form-side { flex: 1; }
+        .image-side img {
+            width: 100%; max-width: 450px; height: 600px; object-fit: cover;
+            border-radius: 300px 300px 0 0; border: 15px solid var(--bg-soft);
+        }
+
+        input, select {
+            width: 100%; padding: 18px 0; margin-bottom: 25px; border: none;
+            border-bottom: 1px solid #ddd; font-family: inherit; outline: none; transition: 0.3s;
+            background: transparent;
+        }
+        input:focus, select:focus { border-bottom-color: var(--accent); }
+
+        button.btn-enviar {
+            width: 100%; padding: 20px; background: var(--primary); color: white;
+            border: none; font-weight: 600; cursor: pointer; letter-spacing: 3px;
+            text-transform: uppercase; transition: var(--transition);
+        }
+        button.btn-enviar:hover { background: var(--accent); }
+
+        /* RODAPÉ (FOOTER) */
+        footer { background-color: var(--primary); color: #fff; padding: 80px 8% 40px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; max-width: 1300px; margin: 0 auto; }
+        .footer-logo h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 20px; }
+        .footer-links h4 { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 25px; color: var(--accent); }
+        .footer-links a, .footer-links p { color: #ccc; text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: #fff; }
+        .footer-bottom { text-align: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        @media (max-width: 968px) {
+            .hero-title { font-size: 3rem; }
+            .grid-portfolio { grid-template-columns: 1fr; }
+            .agendamento-container { flex-direction: column-reverse; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .nav-logo-img { height: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Criando seu espaço...</div>
+</div>
+
+<nav id="navbar">
+    <a href="#home" class="logo-wrapper">
+        <img src="/images/projeto6.jpeg" class="nav-logo-img" alt="Logo">
+    </a>
+    <div class="nav-links">
+        <a href="#home">Início</a>
+        <a href="#historia">Nossa essência</a>
+        <a href="#portfolio">Portfólio</a>
+        <a href="#agendamento">Contato</a>
+        <a href="login.html" class="btn-admin-link">Membro</a>
+    </div>
+</nav>
+
+<section id="home">
+    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; text-transform: uppercase; color: var(--accent); font-size: 0.7rem; margin-bottom: 20px;">Design Atemporal</p>
+    <h1 class="hero-title animate__animated animate__fadeIn">Arquitetura que<br>conta histórias.</h1>
+    <a href="#agendamento" class="btn-hero animate__animated animate__fadeInUp">Agende uma Consultoria</a>
+</section>
+
+<section id="historia">
+    <div class="history-text" id="reveal-text">
+        Projetamos ambientes onde o <strong>luxo</strong> encontra a <strong>funcionalidade</strong>, criando refúgios de bem-estar para o seu dia a dia.
+    </div>
+</section>
+
+<section id="portfolio">
+    <div class="grid-portfolio">
+        <div class="portfolio-item" style="background-image: url('/images/projeto1.jpg');"></div>
+        <div class="portfolio-item" style="background-image: url('/images/projeto11.png');"></div>
+        <div class="portfolio-item" style="background-image: url('/images/projeto3.jpg');"></div>
+    </div>
+</section>
+
+<section id="agendamento">
+    <div class="agendamento-container">
+        <div class="image-side">
+            <img src="/images/projeto.jpeg" alt="Arquitetura Minimalista">
+        </div>
+        <div class="form-side">
+            <p style="color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem;">Solicite seu Orçamento</p>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-top: 10px;">Vamos conversar?</h2>
+            <form id="agendamentoForm">
+                <input type="text" id="nomeCliente" placeholder="Como podemos te chamar?" required>
+                <input type="tel" id="contato" placeholder="Seu WhatsApp" required>
+                <select id="tipoServico" required>
+                    <option value="" disabled selected>O que você busca?</option>
+                    <option value="Consultoria">Consultoria Técnica</option>
+                    <option value="Projeto Completo">Projeto Residencial</option>
+                    <option value="Design de Interiores">Design de Interiores</option>
+                </select>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted);">Data sugerida</label>
+                        <input type="date" id="data" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted);">Horário</label>
+                        <input type="time" id="hora" value="09:00" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-enviar">Enviar Mensagem</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-logo">
+            <h2>Emylle Arq</h2>
+            <p style="color: #ccc; font-size: 0.9rem; max-width: 300px;">Transformando a sua essência em espaços atemporais e funcionais.</p>
+        </div>
+        <div class="footer-links">
+            <h4>Navegação</h4>
+            <a href="#home">Início</a>
+            <a href="#historia">Nossa essência</a>
+            <a href="#portfolio">Portfólio</a>
+            <a href="#agendamento">Agendar</a>
+        </div>
+        <div class="footer-links">
+            <h4>Contato</h4>
+            <p>Eunápolis - BA</p>
+            <a href="https://instagram.com/arqemyllesalles" target="_blank">Instagram: @arqemyllesalles</a>
+            <p>contato.emyllearq@gmail.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 EMYLLE ARQUITETURA & INTERIORES. TODOS OS DIREITOS RESERVADOS.
+    </div>
+</footer>
+
+<script>
+    // Efeito de Reveal no Scroll e Navbar
+    window.addEventListener('scroll', () => {
+        const text = document.getElementById('reveal-text');
+        const navbar = document.getElementById('navbar');
+
+        // Navbar shrink
+        window.scrollY > 80 ? navbar.classList.add('shrink') : navbar.classList.remove('shrink');
+
+        // Reveal text
+        const position = text.getBoundingClientRect().top;
+        if(position < window.innerHeight - 100) text.classList.add('reveal');
+    });
+
+    // Máscara WhatsApp
+    document.getElementById('contato').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, "");
+        if (v.length > 0) v = "(" + v;
+        if (v.length > 3) v = v.slice(0, 3) + ") " + v.slice(3);
+        if (v.length > 10) v = v.slice(0, 10) + "-" + v.slice(10, 15);
+        e.target.value = v;
+    });
+
+    // Envio do Formulário (Lógica Fetch original mantida)
+    document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const overlay = document.getElementById('loader-overlay');
+        overlay.style.display = 'flex';
+
+        const payload = {
+            nomeCliente: document.getElementById('nomeCliente').value,
+            contato: document.getElementById('contato').value,
+            tipoServico: document.getElementById('tipoServico').value,
+            dataHora: document.getElementById('data').value + "T" + document.getElementById('hora').value + ":00"
+        };
+
+        try {
+            const res = await fetch('/api/agendamentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if(res.ok) {
+                Swal.fire({
+                    title: 'Recebemos seu contato!',
+                    text: 'Deseja acelerar o atendimento pelo WhatsApp?',
+                    icon: 'success',
+                    confirmButtonText: 'Sim, falar agora',
+                    confirmButtonColor: '#b05e41',
+                    showCancelButton: true,
+                    cancelButtonText: 'Apenas aguardar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const dataF = new Date(payload.dataHora).toLocaleString('pt-BR');
+                        var texto = `Olá Emylle! ✨ Acabei de solicitar uma consultoria pelo site:\n\n👤 *Nome:* ${payload.nomeCliente}\n💼 *Serviço:* ${payload.tipoServico}\n📅 *Data:* ${dataF}\n\n Aguardo seu retorno!`;
+                        window.open(`https://api.whatsapp.com/send?phone=557391360438&text=${encodeURIComponent(texto)}`, '_blank');
+                    }
+                });
+                this.reset();
+            } else {
+                const erroData = await res.json();
+                Swal.fire({ title: 'Atenção', text: erroData.message || "Verifique os dados.", icon: 'warning' });
+            }
+        } catch (err) {
+            Swal.fire({ title: 'Erro', text: 'Tente novamente em instantes.', icon: 'error' });
+        } finally {
+            overlay.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

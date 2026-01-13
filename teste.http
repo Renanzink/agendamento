@@ -1,0 +1,43 @@
+### Testar a criação de agendamento e envio de e-mail
+POST http://localhost:8080/api/agendamentos
+Content-Type: application/json
+
+{
+  "nomeCliente": "fulano Teste",
+  "contato": "11999999999",
+  "tipoServico": "Visita de Obra",
+  "dataHora": "2026-01-15T10:00:00",
+  "mensagem": "Preciso de uma visita técnica na minha reforma."
+}
+
+### Testar a listagem de agendamentos (Para a Arquiteta)
+GET http://localhost:8080/api/agendamentos
+
+### Teste de erro (Data no passado e nome vazio)
+POST http://localhost:8080/api/agendamentos
+Content-Type: application/json
+
+{
+  "nomeCliente": "Fulano",
+  "contato": "11999999999",
+  "tipoServico": "Reunião",
+  "dataHora": "2020-01-15T10:00:00",
+  "mensagem": "Este teste deve falhar"
+}
+
+### Testar a exclusão do agendamento de ID 1
+DELETE http://localhost:8080/api/agendamentos/1
+Authorization: Basic admin arquitetura2026
+
+### Testar a alteração do agendamento de ID 2 (Mudar nome por exemplo)
+PUT http://localhost:8080/api/agendamentos/2
+Content-Type: application/json
+Authorization: Basic admin arquitetura2026
+
+{
+  "nomeCliente": "Cliente Nome Alterado",
+  "contato": "11999999999",
+  "tipoServico": "Visita Técnica",
+  "dataHora": "2026-02-15T10:00:00",
+  "mensagem": "Mudamos a data da reunião"
+}
