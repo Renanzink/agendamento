@@ -28,27 +28,35 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> dados, HttpServletRequest request, HttpServletResponse response) {
-        //refatorar essa classe e colocar a Autenticacao utilizando JWT e OAUTH2. Retornando o token e podendo utilizar ele.
-
         try {
             String login = dados.get("login").trim();
             String senha = dados.get("senha").trim();
 
+            // 1. Autentica o usuário
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login, senha)
             );
 
-
+            // 2. Cria o contexto de segurança
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
+
+            // 3. PERSISTÊNCIA MANUAL DA SESSÃO (Essencial para nuvem)
+            // Salva no repositório do Spring Security
             securityContextRepository.saveContext(context, request, response);
 
+            // Força a criação/vinculação da sessão do Java (HttpSession)
+            request.getSession(true).setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    context
+            );
 
             return ResponseEntity.ok().body(Map.of("message", "Login realizado com sucesso"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Usuário ou senha inválidos"));
         }
+    }
     }
 }
