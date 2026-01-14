@@ -4,346 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Emylle Arq & Interiores</title>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
-        /* CONFIGURAÇÕES GLOBAIS */
+        /* VARIÁVEIS DE CORES */
         :root {
-            --primary: #4a3728;
+            --primary: #2d2a26;
             --accent: #b05e41;
-            --text-muted: #8e8e8e;
-            --bg-soft: #FDF9F7;
-            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --accent-hover: #8e4a32;
+            --bg: #fdfaf8;
+            --white: #ffffff;
+            --text-muted: #7a736d;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
+        /* RESET E BASE */
+        * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; color: var(--primary); background-color: #fff; overflow-x: hidden; line-height: 1.6; }
-
-        /* LOADER */
-        #loader-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            color: var(--primary);
+            overflow-x: hidden;
         }
-        .spinner {
-            width: 50px; height: 50px; border: 2px solid #eee; border-top: 2px solid var(--accent);
-            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* NAVBAR */
+        /* NAVBAR PROFISSIONAL */
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 8%; height: 160px;
-            background-color: transparent;
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.98);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(176, 94, 65, 0.1);
             transition: var(--transition);
-        }
-
-        nav.shrink {
-            height: 90px; background-color: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(176, 94, 65, 0.1);
         }
 
         .nav-logo-img {
-            height: 240px;
-            width: auto;
-            border-radius: 12px;
-            border: 2px solid var(--accent);
+            height: 400px; /* Logo imponente */
+            width: 350px;
+            border-radius: 60px;
+            border: 4px solid white;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: white;
+            transform: translateY(140px);
             transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        nav.shrink .nav-logo-img { height: 65px; }
 
-        .nav-links { display: flex; gap: 35px; align-items: center; }
+        /* MENU DESKTOP */
+        .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a {
-            text-decoration: none; color: var(--primary); font-size: 0.75rem;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
-            position: relative; transition: 0.3s;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
         }
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 1px; bottom: -5px;
-            left: 0; background-color: var(--accent); transition: 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent); }
 
-        .btn-admin-link { border: 1px solid var(--accent) !important; padding: 8px 15px; border-radius: 4px; color: var(--accent) !important; }
+        .btn-admin {
+            border: 1.5px solid var(--accent);
+            color: var(--accent) !important;
+            padding: 8px 18px;
+            border-radius: 4px;
+        }
+
+        /* MENU MOBILE ICON */
+        .mobile-menu-icon {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--accent);
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        /* RESPONSIVIDADE NAVBAR */
+        @media (max-width: 968px) {
+            .mobile-menu-icon { display: block; }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                gap: 40px;
+                padding: 40px;
+                transition: 0.5s ease-in-out;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active { right: 0; }
+
+            .nav-logo-img {
+                height: 80px;
+                width: 200px;
+                transform: translateY(0);
+                border-radius: 40px;
+            }
+            nav { height: 80px; }
+        }
 
         /* HERO SECTION */
         #home {
             height: 100vh;
-            background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
+            background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
             url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000') no-repeat center center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            padding: 0 20px;
         }
 
         .hero-title {
-            font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 400;
-            line-height: 1.1; margin-bottom: 20px; color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin: 20px 0;
         }
 
-        .btn-hero {
-            margin-top: 40px; padding: 18px 45px; background-color: var(--accent);
-            color: white; text-decoration: none; font-weight: 600; border-radius: 2px;
-            letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;
-            transition: var(--transition); box-shadow: 0 10px 20px rgba(176, 94, 65, 0.2);
+        /* PORTFÓLIO */
+        #portfolio { padding: 100px 5%; background: var(--white); }
+        .portfolio-header { text-align: center; margin-bottom: 60px; }
+        .grid-portfolio {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
-        .btn-hero:hover { background-color: var(--primary); transform: translateY(-3px); }
+        .portfolio-item {
+            position: relative;
+            height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .portfolio-img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .portfolio-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 30px; opacity: 0; transition: 0.4s;
+        }
+        .portfolio-item:hover .portfolio-img { transform: scale(1.1); }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-overlay h3 { color: white; font-family: 'Playfair Display', serif; margin: 0; }
+        .portfolio-overlay p { color: rgba(255,255,255,0.8); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        @media (max-width: 768px) {
+            .grid-portfolio { grid-template-columns: 1fr; }
+            .portfolio-overlay { opacity: 1; height: 40%; }
+        }
 
         /* HISTORIA */
-        #historia { background-color: var(--bg-soft); padding: 120px 15%; text-align: center; }
-        .history-text {
-            font-family: 'Playfair Display', serif; font-size: 2.8rem;
-            font-weight: 400; color: var(--primary); opacity: 0; transform: translateY(30px);
-            transition: 1s all ease;
-        }
-        .reveal { opacity: 1; transform: translateY(0); }
+        #historia { padding: 100px 10%; text-align: center; background: var(--bg); }
+        .history-text { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); color: #555; line-height: 1.2; }
 
-        /* PORTFOLIO */
-        #portfolio { padding: 100px 5%; }
-        .grid-portfolio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .portfolio-item {
-            height: 550px; background-size: cover; background-position: center;
-            transition: var(--transition); filter: grayscale(0.3); cursor: pointer;
-            overflow: hidden; position: relative;
+        /* FORMULÁRIO */
+        .agendamento-container {
+            display: flex; gap: 50px; padding: 100px 8%;
+            max-width: 1200px; margin: 0 auto; align-items: center;
         }
-        .portfolio-item:hover { filter: grayscale(0); transform: scale(0.98); }
-
-        /* AGENDAMENTO */
-        #agendamento { background-color: #fff; padding: 120px 8%; }
-        .agendamento-container { display: flex; gap: 80px; align-items: center; max-width: 1300px; margin: 0 auto; }
-        .form-side { flex: 1; }
-        .image-side img {
-            width: 100%; max-width: 450px; height: 600px; object-fit: cover;
-            border-radius: 300px 300px 0 0; border: 15px solid var(--bg-soft);
-        }
-
         input, select {
-            width: 100%; padding: 18px 0; margin-bottom: 25px; border: none;
-            border-bottom: 1px solid #ddd; font-family: inherit; outline: none; transition: 0.3s;
-            background: transparent;
+            width: 100%; padding: 15px; margin-bottom: 20px;
+            border: none; border-bottom: 1px solid #ddd;
+            background: transparent; outline: none; transition: 0.3s;
         }
-        input:focus, select:focus { border-bottom-color: var(--accent); }
-
-        button.btn-enviar {
-            width: 100%; padding: 20px; background: var(--primary); color: white;
-            border: none; font-weight: 600; cursor: pointer; letter-spacing: 3px;
-            text-transform: uppercase; transition: var(--transition);
+        .btn-enviar {
+            width: 100%; padding: 20px; background: var(--accent);
+            color: white; border: none; font-weight: 600; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
         }
-        button.btn-enviar:hover { background: var(--accent); }
 
-        /* FOOTER */
-        footer { background-color: var(--primary); color: #fff; padding: 80px 8% 40px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; max-width: 1300px; margin: 0 auto; }
-        .footer-logo h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 20px; }
-        .footer-links h4 { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 25px; color: var(--accent); }
-        .footer-links a, .footer-links p { color: #ccc; text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: 0.3s; }
-        .footer-links a:hover { color: #fff; }
-        .footer-bottom { text-align: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
-
-        @media (max-width: 968px) {
-            .hero-title { font-size: 3rem; }
-            .grid-portfolio { grid-template-columns: 1fr; }
-            .agendamento-container { flex-direction: column-reverse; }
-            .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-            .nav-logo-img { height: 80px; }
+        /* WHATSAPP FLOAT */
+        .whatsapp-float {
+            position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
+            background-color: #25d366; color: #FFF; border-radius: 50px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1100;
+            text-decoration: none; animation: pulse-whatsapp 2s infinite;
         }
+        @keyframes pulse-whatsapp {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); }
+        }
+
+        footer { background: var(--primary); color: white; padding: 60px 5%; text-align: center; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div id="loader-overlay">
+<div id="loader-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
     <div class="spinner"></div>
-    <div class="loading-text">Criando seu espaço...</div>
+    <p style="margin-top: 15px; font-weight: 600; color: var(--accent);">Processando...</p>
 </div>
 
 <nav id="navbar">
     <a href="#home" class="logo-wrapper">
         <img src="/images/projeto6.jpeg" class="nav-logo-img" alt="Logo">
     </a>
-    <div class="nav-links">
+    <div class="mobile-menu-icon" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="nav-links" id="nav-menu">
         <a href="#home">Início</a>
-        <a href="#historia">Nossa essência</a>
+        <a href="#historia">Essência</a>
         <a href="#portfolio">Portfólio</a>
         <a href="#agendamento">Contato</a>
-        <a href="login.html" class="btn-admin-link">Membro</a>
+        <a href="login.html" class="btn-admin">Membro</a>
     </div>
 </nav>
 
+<a href="https://api.whatsapp.com/send?phone=5573991360438" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <section id="home">
-    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; text-transform: uppercase; color: var(--accent); font-size: 0.7rem; margin-bottom: 20px;">Design Atemporal</p>
+    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; text-transform: uppercase; color: var(--accent); font-size: 0.7rem;">Design Atemporal</p>
     <h1 class="hero-title animate__animated animate__fadeIn">Arquitetura que<br>conta histórias.</h1>
-    <a href="#agendamento" class="btn-hero animate__animated animate__fadeInUp">Agende uma Consultoria</a>
+    <a href="#agendamento" class="btn-enviar" style="max-width: 300px; text-decoration: none; text-align: center; display: inline-block;">Agendar Consultoria</a>
 </section>
 
 <section id="historia">
-    <div class="history-text" id="reveal-text">
-        Projetamos ambientes onde o <strong>luxo</strong> encontra a <strong>funcionalidade</strong>, criando refúgios de bem-estar para o seu dia a dia.
+    <div class="history-text">
+        Projetamos ambientes onde o <strong>luxo</strong> encontra a <strong>funcionalidade</strong>.
     </div>
 </section>
 
 <section id="portfolio">
+    <div class="portfolio-header">
+        <p style="letter-spacing: 5px; color: var(--accent); font-size: 0.7rem; text-transform: uppercase;">Projetos Selecionados</p>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem;">Portfólio</h2>
+    </div>
     <div class="grid-portfolio">
-        <div class="portfolio-item" style="background-image: url('/images/projeto1.jpg');"></div>
-        <div class="portfolio-item" style="background-image: url('/images/projeto11.png');"></div>
-        <div class="portfolio-item" style="background-image: url('/images/projeto3.jpg');"></div>
+        <div class="portfolio-item">
+            <img src="/images/projeto1.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay">
+                <p>Residencial</p>
+                <h3>Living Luxo</h3>
+            </div>
+        </div>
+        <div class="portfolio-item">
+            <img src="/images/projeto2.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay">
+                <p>Comercial</p>
+                <h3>Boutique Fashion</h3>
+            </div>
+        </div>
     </div>
 </section>
 
 <section id="agendamento">
     <div class="agendamento-container">
-        <div class="image-side">
-            <img src="/images/projeto.jpeg" alt="Arquitetura Minimalista">
-        </div>
-        <div class="form-side">
-            <p style="color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem;">Solicite seu Orçamento</p>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-top: 10px;">Vamos conversar?</h2>
+        <div class="form-side" style="flex: 1; width: 100%;">
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 30px;">Vamos conversar?</h2>
             <form id="agendamentoForm">
-                <input type="text" id="nomeCliente" placeholder="Como podemos te chamar?" required>
+                <input type="text" id="nomeCliente" placeholder="Seu nome" required>
                 <input type="tel" id="contato" placeholder="Seu WhatsApp" required>
                 <select id="tipoServico" required>
                     <option value="" disabled selected>O que você busca?</option>
                     <option value="Consultoria">Consultoria Técnica</option>
-                    <option value="Projeto Completo">Projeto Residencial</option>
-                    <option value="Design de Interiores">Design de Interiores</option>
-                    <option value="Projeto comercial">Projeto comercial</option>
+                    <option value="Projeto Residencial">Projeto Residencial</option>
                 </select>
-                <div style="display: flex; gap: 20px;">
-                    <div style="flex: 1;">
-                        <label style="font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted);">Data sugerida</label>
-                        <input type="date" id="data" required>
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="font-size: 0.6rem; text-transform: uppercase; color: var(--text-muted);">Horário</label>
-                        <input type="time" id="hora" value="09:00" required>
-                    </div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="date" id="data" required>
+                    <input type="time" id="hora" value="09:00" required>
                 </div>
-                <button type="submit" class="btn-enviar">Enviar Mensagem</button>
+                <button type="submit" class="btn-enviar">Solicitar Orçamento</button>
             </form>
         </div>
     </div>
 </section>
 
 <footer>
-    <div class="footer-grid">
-        <div class="footer-logo">
-            <h2>Emylle Arq</h2>
-            <p style="color: #ccc; font-size: 0.9rem; max-width: 300px;">Transformando a sua essência em espaços atemporais e funcionais.</p>
-        </div>
-        <div class="footer-links">
-            <h4>Navegação</h4>
-            <a href="#home">Início</a>
-            <a href="#historia">Nossa essência</a>
-            <a href="#portfolio">Portfólio</a>
-            <a href="#agendamento">Agendar</a>
-        </div>
-        <div class="footer-links">
-            <h4>Contato</h4>
-            <p>Eunápolis - BA</p>
-            <a href="https://instagram.com/arqemyllesalles" target="_blank">Instagram: @arqemyllesalles</a>
-            <p>contato.emyllearq@gmail.com</p>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        &copy; 2026 EMYLLE ARQUITETURA & INTERIORES. TODOS OS DIREITOS RESERVADOS.
-    </div>
+    &copy; 2026 EMYLLE ARQUITETURA & INTERIORES.
 </footer>
 
 <script>
-    // Efeito de Scroll
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    mobileBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        mobileBtn.querySelector('i').classList.toggle('fa-bars');
+        mobileBtn.querySelector('i').classList.toggle('fa-times');
+    });
+
     window.addEventListener('scroll', () => {
-        const text = document.getElementById('reveal-text');
         const navbar = document.getElementById('navbar');
-        window.scrollY > 80 ? navbar.classList.add('shrink') : navbar.classList.remove('shrink');
-        if(text) {
-            const position = text.getBoundingClientRect().top;
-            if(position < window.innerHeight - 100) text.classList.add('reveal');
-        }
+        navbar.style.height = window.scrollY > 50 ? '80px' : '100px';
     });
 
-    // Máscara de Telefone
-    document.getElementById('contato').addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, "");
-        if (v.length > 0) v = "(" + v;
-        if (v.length > 3) v = v.slice(0, 3) + ") " + v.slice(3);
-        if (v.length > 10) v = v.slice(0, 10) + "-" + v.slice(10, 15);
-        e.target.value = v;
-    });
-
-    // Envio do Formulário
-    document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const overlay = document.getElementById('loader-overlay');
-        overlay.style.display = 'flex';
-
-        const payload = {
-            nomeCliente: document.getElementById('nomeCliente').value,
-            contato: document.getElementById('contato').value,
-            tipoServico: document.getElementById('tipoServico').value,
-            dataHora: document.getElementById('data').value + "T" + document.getElementById('hora').value + ":00"
-        };
-
-        try {
-            const res = await fetch('/api/agendamentos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            // Lógica robusta para ler a resposta apenas se for JSON
-            let dataRes = {};
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-                dataRes = await res.json();
-            }
-
-            if(res.ok) {
-                Swal.fire({
-                    title: 'Recebemos seu contato!',
-                    text: 'Deseja acelerar o atendimento pelo WhatsApp?',
-                    icon: 'success',
-                    confirmButtonText: 'Sim, falar agora',
-                    confirmButtonColor: '#b05e41',
-                    showCancelButton: true,
-                    cancelButtonText: 'Apenas aguardar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const dataF = new Date(payload.dataHora).toLocaleString('pt-BR');
-                        var texto = `Olá Emylle! ✨ Acabei de solicitar uma consultoria pelo site:\n\n👤 *Nome:* ${payload.nomeCliente}\n💼 *Serviço:* ${payload.tipoServico}\n📅 *Data:* ${dataF}\n\n Aguardo seu retorno!`;
-                        window.open(`https://api.whatsapp.com/send?phone=5573991360438&text=${encodeURIComponent(texto)}`, '_blank');
-                    }
-                });
-                this.reset();
-            } else {
-                // Captura a mensagem de erro do Java (@Future ou customizada)
-                let msgErro = "Verifique os dados preenchidos.";
-
-                if (dataRes.errors && dataRes.errors.length > 0) {
-                    msgErro = dataRes.errors[0].defaultMessage; // Mensagem do @Future
-                } else if (dataRes.message) {
-                    msgErro = dataRes.message; // Mensagem manual do Controller
-                }
-
-                Swal.fire({
-                    title: 'Atenção',
-                    text: msgErro,
-                    icon: 'warning',
-                    confirmButtonColor: '#b05e41'
-                });
-            }
-        } catch (err) {
-            console.error("Erro na requisição:", err);
-            Swal.fire({
-                title: 'Erro de Conexão',
-                text: 'Não conseguimos processar seu pedido. Tente novamente em instantes.',
-                icon: 'error'
-            });
-        } finally {
-            overlay.style.display = 'none';
-        }
-    });
 </script>
+
 </body>
 </html>
