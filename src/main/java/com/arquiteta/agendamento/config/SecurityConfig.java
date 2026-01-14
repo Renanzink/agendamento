@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/agendamentos").permitAll()
 
                         // Protege o admin - permitindo qualquer logado por enquanto (sem checar ROLE)
-                        .requestMatchers("/admin.html").authenticated()
+                        .requestMatchers("/admin.html").permitAll()
 
                         .anyRequest().authenticated()
                 )
