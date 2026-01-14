@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,11 +28,16 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder()); // Vincula o encoder ao provedor
         return authProvider;
     }
 
@@ -43,15 +47,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // Libera arquivos estáticos e páginas
+                        // Arquivos públicos
                         .requestMatchers("/", "/index.html", "/login.html", "/style.css", "/images/**", "/favicon.ico").permitAll()
-                        // Libera o login
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        // CORREÇÃO: Libera a criação de agendamento para o público
                         .requestMatchers(HttpMethod.POST, "/api/agendamentos").permitAll()
-                        // Protege o painel administrativo
-                        //precisa criar a classe de roles ou verificar como colocar uma role default com usuario e senha
-                        .requestMatchers("/admin.html").hasAuthority("ROLE_ADMIN")
+
+                        // Protege o admin - permitindo qualquer logado por enquanto (sem checar ROLE)
+                        .requestMatchers("/admin.html").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
