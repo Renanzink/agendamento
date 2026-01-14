@@ -44,22 +44,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // 1. Desativa CSRF para permitir requisições de formulários externos/APIs
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        // Arquivos públicos
-                        .requestMatchers("/", "/index.html", "/login.html", "/style.css", "/images/**", "/favicon.ico").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/agendamentos").permitAll()
 
-                        // Protege o admin - permitindo qualquer logado por enquanto (sem checar ROLE)
+                // 2. Configura o CORS antes de tudo
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                .authorizeHttpRequests(auth -> auth
+                        // Libera o pre-flight request (OPTIONS) que o navegador faz
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Arquivos e endpoints públicos
+                        .requestMatchers("/", "/index.html", "/login.html", "/style.css", "/images/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/agendamentos").permitAll()
+
+                        // Libera o admin temporariamente para teste de rota
                         .requestMatchers("/admin.html").permitAll()
 
                         .anyRequest().authenticated()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -71,10 +73,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+        // Permite a origem do seu site no Koyeb
         config.setAllowedOriginPatterns(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        config.setAllowCredentials(true); // Necessário para cookies/sessão
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
