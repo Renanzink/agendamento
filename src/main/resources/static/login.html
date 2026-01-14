@@ -163,8 +163,8 @@
 
         const errorDisplay = document.getElementById('error');
         const btn = document.getElementById('btnEntrar');
-        const login = document.getElementById('username').value;
-        const senha = document.getElementById('password').value;
+        const loginDigitado = document.getElementById('username').value;
+        const senhaDigitada = document.getElementById('password').value;
 
         errorDisplay.style.display = 'none';
         btn.disabled = true;
@@ -173,8 +173,14 @@
         try {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ login, senha }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    login: loginDigitado,
+                    senha: senhaDigitada
+                }),
                 credentials: 'include'
             });
 
@@ -182,13 +188,12 @@
                 // 1. Salva flag local
                 localStorage.setItem('sessao_emylle', 'ativa');
 
-                // 2. Pequeno delay para garantir que o cookie JSESSIONID seja processado pelo navegador
-                setTimeout(() => {
-                    window.location.href = 'admin.html';
-                }, 200);
+                // 2. Redirecionamento imediato para o admin
+                // replace impede que o usuário volte ao login apertando o botão 'voltar'
+                window.location.replace('admin.html');
 
             } else {
-                errorDisplay.innerText = "Acesso negado. Verifique usuário e senha.";
+                errorDisplay.innerText = "Usuário ou senha incorretos.";
                 errorDisplay.style.display = 'block';
                 btn.disabled = false;
                 btn.innerText = "Entrar no Sistema";
