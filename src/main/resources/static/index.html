@@ -267,16 +267,18 @@
                 const iconClock = "\u23F0";      // Relógio ⏰
                 const iconPhone = "\uD83D\uDCDE"; // Telefone 📞
 
-                const textoMensagem =
-                    "*Novo Agendamento - Site*" + quebra + quebra +
-                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:" + quebra + quebra +
-                    iconUser + " *Nome:* " + nome + quebra +
-                    iconCal + " *Data sugerida:* " + dataFormatada + quebra +
-                    iconClock + " *Horário:* " + hora + quebra +
-                    iconPhone + " *Contato:* " + whats + quebra + quebra +
-                    "Aguardo seu retorno!";
+                const numWhats = "5573991360438";
 
-                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
+                // Montando a mensagem com escape de URL direto para evitar o erro
+                let mensagemAgendamento = "*Novo Agendamento - Site*\n\n";
+                mensagemAgendamento += "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n";
+                mensagemAgendamento += "👤 *Nome:* " + nome + "\n";
+                mensagemAgendamento += "📅 *Data sugerida:* " + dataFormatada + "\n";
+                mensagemAgendamento += "⏰ *Horário:* " + hora + "\n";
+                mensagemAgendamento += "📞 *Contato:* " + whats + "\n\n";
+                mensagemAgendamento += "Aguardo seu retorno!";
+
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(mensagemAgendamento);
 
                 Swal.fire({
                     title: 'Enviado com Sucesso!',
