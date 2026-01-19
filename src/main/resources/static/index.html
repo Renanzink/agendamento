@@ -204,7 +204,7 @@
     <div style="margin: 20px 0; display: flex; justify-content: center; gap: 20px;">
         <a href="https://www.instagram.com/arqemyllesalles/" target="_blank" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
     </div>
-    <p style="font-size: 0.7rem; opacity: 0.6; letter-spacing: 1px;">&copy; 2024 TODOS OS DIREITOS RESERVADOS</p>
+    <p style="font-size: 0.7rem; opacity: 0.6; letter-spacing: 1px;">&copy; 2026 TODOS OS DIREITOS RESERVADOS</p>
 </footer>
 
 <script>
@@ -258,17 +258,24 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Esta é a sua mensagem blindada (contém os emojis e formatação correta)
-                // Ela será decodificada apenas no momento do envio para não sofrer interferência do navegador
-                const b64 = "Kk5vdm8gQWdlbmRhbWVudG8gLSBTaXRlKgolMEEwQU9sw6EsIEVteWxsZSEgR29zdGFyaWEgZGUgaW5pY2lhciBtZXUgcHJvamV0byBlIGNvbmZpcm1hciBtaW5oYSBzb2xpY2l0YcOnw6NvOgolMEEwQfCfkpQgKk5vbWU6KiB7bm9tZX0KJTBBRfCfk5UgKkRhdGEgc3VnZXJpZGE6KiB7ZGF0YX0KJTBBRfC9sICpIb3LDoXJpbzoqIHtob3JhfQolMEFF8J+TniAqQ29udGF0bzoqIHt3aGF0c30KJTBBMDVBZ3VhcmRvIHNldSByZXRvcm5vIQ==";
+                // Emojis em Unicode Puro para blindar o código contra erros de codificação de arquivo
+                const iconUser = "\uD83D\uDC64"; // 👤
+                const iconCal  = "\uD83D\uDCC5"; // 📅
+                const iconClock = "\u23F0";      // ⏰
+                const iconPhone = "\uD83D\uDCDE"; // 📞
 
-                let msg = atob(b64);
-                msg = msg.replace("{nome}", nome)
-                    .replace("{data}", dataFormatada)
-                    .replace("{hora}", hora)
-                    .replace("{whats}", whats);
+                // Montagem da mensagem usando Template Strings com quebras de linha preservadas
+                const msg = `*Novo Agendamento - Site*
 
-                // Gerando a URL final
+Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:
+
+${iconUser} *Nome:* ${nome}
+${iconCal} *Data sugerida:* ${dataFormatada}
+${iconClock} *Horário:* ${hora}
+${iconPhone} *Contato:* ${whats}
+
+Aguardo seu retorno!`;
+
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(msg);
 
                 Swal.fire({
