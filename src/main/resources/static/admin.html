@@ -30,13 +30,26 @@
 
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
 
-        /* BARRA DE AÇÕES EM MASSA */
         .bulk-actions-bar {
             background: var(--primary); color: white;
             padding: 15px 30px; border-radius: 8px;
-            margin-bottom: 20px; display: none; /* Escondida por padrão */
+            margin-bottom: 20px; display: none;
             justify-content: space-between; align-items: center;
             animation: slideInDown 0.3s forwards;
+            position: sticky; top: 85px; z-index: 99;
+        }
+
+        /* BARRA DE FILTROS */
+        .filter-row {
+            background: white; padding: 20px; border-radius: 12px;
+            margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); align-items: center;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 200px; }
+        .filter-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #999; }
+        .filter-control {
+            padding: 10px; border: 1px solid #eee; border-radius: 6px;
+            outline: none; font-family: inherit; color: var(--primary);
         }
 
         .stats-grid {
@@ -56,21 +69,12 @@
         }
         h2 { font-family: 'Playfair Display', serif; margin: 0; font-size: 1.6rem; }
 
-        .search-wrapper { position: relative; }
-        .search-wrapper i { position: absolute; left: 15px; top: 12px; color: #ccc; }
-        .search-box {
-            padding: 10px 15px 10px 40px; border: 1px solid #eee;
-            border-radius: 25px; width: 300px; outline: none; transition: 0.3s;
-        }
-        .search-box:focus { border-color: var(--accent); width: 350px; }
-
         .table-container { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         table { width: 100%; border-collapse: collapse; }
         th { background: #fafafa; padding: 15px; text-align: left; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #eee; }
         td { padding: 15px; border-bottom: 1px solid #f8f8f8; font-size: 0.9rem; }
         tr:hover { background-color: #fdfdfd; }
 
-        /* Estilo para Checkboxes */
         .check-col { width: 40px; text-align: center; }
         input[type="checkbox"] { cursor: pointer; transform: scale(1.2); accent-color: var(--accent); }
 
@@ -88,16 +92,12 @@
             background: var(--accent); color: white; border: none;
             padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
-        .btn-main:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
         .badge-pending { background: #fff3cd; color: #856404; }
         .badge-success { background: #d4edda; color: #155724; }
 
-        @keyframes slideInDown {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideInDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -115,10 +115,34 @@
 
 <div class="container">
     <div id="bulk-bar" class="bulk-actions-bar">
-        <div><span id="selected-count">0</span> itens selecionados</div>
+        <div><i class="fas fa-tasks"></i> <span id="selected-count">0</span> selecionados</div>
         <div style="display: flex; gap: 10px;">
-            <button onclick="executarEmMassa('concluir')" class="btn-action btn-done" style="background: white;"><i class="fas fa-check"></i> CONCLUIR SELECIONADOS</button>
-            <button onclick="executarEmMassa('excluir')" class="btn-action btn-del" style="background: white;"><i class="fas fa-trash"></i> EXCLUIR SELECIONADOS</button>
+            <button onclick="executarEmMassa('concluir')" class="btn-action btn-done" style="background: white;"><i class="fas fa-check"></i> CONCLUIR</button>
+            <button onclick="executarEmMassa('excluir')" class="btn-action btn-del" style="background: white;"><i class="fas fa-trash"></i> EXCLUIR</button>
+        </div>
+    </div>
+
+    <div class="filter-row">
+        <div class="filter-group" style="flex: 2;">
+            <label>Pesquisar Cliente</label>
+            <input type="text" id="filter-search" class="filter-control" placeholder="Digite nome ou contato..." onkeyup="aplicarFiltros()">
+        </div>
+        <div class="filter-group">
+            <label>Período</label>
+            <select id="filter-date" class="filter-control" onchange="aplicarFiltros()">
+                <option value="all">Todos os tempos</option>
+                <option value="today">Hoje</option>
+                <option value="week">Esta Semana</option>
+                <option value="month">Este Mês</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Serviço</label>
+            <select id="filter-service" class="filter-control" onchange="aplicarFiltros()">
+                <option value="all">Todos os serviços</option>
+                <option value="Solicitação de Projeto">Solicitação de Projeto</option>
+                <option value="Consultoria">Consultoria</option>
+            </select>
         </div>
     </div>
 
@@ -138,11 +162,7 @@
     </div>
 
     <div class="section-header">
-        <h2><i class="fas fa-calendar-alt" style="color: var(--accent);"></i> Próximos Atendimentos</h2>
-        <div class="search-wrapper">
-            <i class="fas fa-search"></i>
-            <input type="text" class="search-box" placeholder="Filtrar por nome ou serviço..." onkeyup="filtrarTabela('tabela-pendentes', this.value)">
-        </div>
+        <h2><i class="fas fa-calendar-alt" style="color: var(--accent);"></i> Agendamentos</h2>
     </div>
 
     <div class="table-container">
@@ -157,191 +177,133 @@
                 <th>Ações</th>
             </tr>
             </thead>
-            <tbody id="tabela-pendentes"></tbody>
-        </table>
-    </div>
-
-    <div class="section-header">
-        <h2><i class="fas fa-check-circle" style="color: var(--success);"></i> Histórico de Concluídos</h2>
-        <div class="search-wrapper">
-            <i class="fas fa-search"></i>
-            <input type="text" class="search-box" placeholder="Pesquisar no histórico..." onkeyup="filtrarTabela('tabela-historico', this.value)">
-        </div>
-    </div>
-
-    <div class="table-container" style="margin-bottom: 50px;">
-        <table>
-            <thead>
-            <tr>
-                <th>Cliente</th>
-                <th>Serviço</th>
-                <th>Data e Hora</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody id="tabela-historico"></tbody>
+            <tbody id="tabela-dados"></tbody>
         </table>
     </div>
 </div>
 
 <script>
+    let agendamentosGlobais = [];
+
     if (localStorage.getItem('sessao_emylle') !== 'ativa') {
         window.location.replace('login.html');
     }
 
-    // --- FUNÇÕES DE SELEÇÃO EM MASSA ---
-
     function toggleTodos(source) {
         const checkboxes = document.querySelectorAll('.row-checkbox');
-        checkboxes.forEach(cb => cb.checked = source.checked);
+        checkboxes.forEach(cb => {
+            if (cb.closest('tr').style.display !== 'none') {
+                cb.checked = source.checked;
+            }
+        });
         atualizarBarraBulk();
     }
 
     function atualizarBarraBulk() {
         const selecionados = document.querySelectorAll('.row-checkbox:checked').length;
         const bar = document.getElementById('bulk-bar');
-        const countSpan = document.getElementById('selected-count');
-
-        if (selecionados > 0) {
-            bar.style.display = 'flex';
-            countSpan.innerText = selecionados;
-        } else {
-            bar.style.display = 'none';
-            document.getElementById('master-checkbox').checked = false;
-        }
+        document.getElementById('selected-count').innerText = selecionados;
+        bar.style.display = selecionados > 0 ? 'flex' : 'none';
+        if (selecionados === 0) document.getElementById('master-checkbox').checked = false;
     }
 
     async function executarEmMassa(tipo) {
         const selecionados = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
-        if (selecionados.length === 0) return;
-
-        const confirmacao = await Swal.fire({
-            title: `Deseja ${tipo} ${selecionados.length} itens?`,
-            text: "Esta ação afetará todos os registros selecionados.",
+        const res = await Swal.fire({
+            title: `Confirmar para ${selecionados.length} itens?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: tipo === 'excluir' ? '#dc3545' : '#28a745',
-            confirmButtonText: 'Sim, proceder'
+            confirmButtonText: 'Sim, executar'
         });
 
-        if (confirmacao.isConfirmed) {
-            Swal.fire({ title: 'Processando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-            let sucessos = 0;
-            const metodo = tipo === 'excluir' ? 'DELETE' : 'PATCH';
-
+        if (res.isConfirmed) {
+            Swal.fire({ title: 'Processando...', didOpen: () => Swal.showLoading() });
             for (const id of selecionados) {
                 const url = tipo === 'excluir' ? `/api/agendamentos/${id}` : `/api/agendamentos/${id}/concluir`;
-                try {
-                    const res = await fetch(url, { method: metodo, credentials: 'include' });
-                    if (res.ok) sucessos++;
-                } catch (e) { console.error(`Erro no ID ${id}`, e); }
+                await fetch(url, { method: tipo === 'excluir' ? 'DELETE' : 'PATCH', credentials: 'include' });
             }
-
-            Swal.fire('Concluído', `${sucessos} itens processados com sucesso.`, 'success');
+            Swal.fire('Sucesso!', 'Ação concluída.', 'success');
             carregar();
         }
     }
 
-    // --- FUNÇÕES DE CARREGAMENTO E FILTRO ---
-
-    function filtrarTabela(idTabela, termo) {
-        const filtro = termo.toLowerCase();
-        const rows = document.getElementById(idTabela).getElementsByTagName('tr');
-        for (let row of rows) {
-            row.style.display = row.innerText.toLowerCase().includes(filtro) ? "" : "none";
+    async function carregar() {
+        try {
+            const res = await fetch('/api/agendamentos', { credentials: 'include' });
+            if (!res.ok) throw new Error();
+            agendamentosGlobais = await res.json();
+            aplicarFiltros();
+        } catch (e) {
+            Swal.fire('Erro', 'Falha ao carregar dados.', 'error');
         }
     }
 
-    async function carregar() {
-        const btn = document.querySelector('.btn-main');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ATUALIZANDO...';
+    function aplicarFiltros() {
+        const termo = document.getElementById('filter-search').value.toLowerCase();
+        const periodo = document.getElementById('filter-date').value;
+        const servico = document.getElementById('filter-service').value;
+        const tbody = document.getElementById('tabela-dados');
 
-        // Reseta barra de massa
-        document.getElementById('bulk-bar').style.display = 'none';
-        document.getElementById('master-checkbox').checked = false;
+        tbody.innerHTML = '';
+        const agora = new Date();
+        let pCount = 0; let cCount = 0;
 
-        try {
-            const res = await fetch('/api/agendamentos', { credentials: 'include' });
-            if (res.status === 401 || res.status === 403) { logout(); return; }
+        const filtrados = agendamentosGlobais.filter(item => {
+            const dataItem = new Date(item.dataHora);
 
-            const dados = await res.json();
-            const tbodyPendentes = document.getElementById('tabela-pendentes');
-            const tbodyHistorico = document.getElementById('tabela-historico');
+            // Filtro de Texto
+            const bateTexto = item.nomeCliente.toLowerCase().includes(termo) || item.contato.includes(termo);
 
-            tbodyPendentes.innerHTML = '';
-            tbodyHistorico.innerHTML = '';
+            // Filtro de Serviço
+            const bateServico = servico === 'all' || item.tipoServico === servico;
 
-            const pendentes = dados.filter(i => i.status === 'PENDENTE' || !i.status)
-                .sort((a,b) => new Date(a.dataHora) - new Date(b.dataHora));
+            // Filtro de Data
+            let bateData = true;
+            if (periodo === 'today') bateData = dataItem.toDateString() === agora.toDateString();
+            if (periodo === 'week') {
+                const umaSemana = new Date(); umaSemana.setDate(agora.getDate() + 7);
+                bateData = dataItem >= agora && dataItem <= umaSemana;
+            }
+            if (periodo === 'month') bateData = dataItem.getMonth() === agora.getMonth() && dataItem.getFullYear() === agora.getFullYear();
 
-            const concluidos = dados.filter(i => i.status === 'CONCLUIDO')
-                .sort((a,b) => new Date(b.dataHora) - new Date(a.dataHora));
+            return bateTexto && bateServico && bateData;
+        });
 
-            document.getElementById('count-pendentes').innerText = pendentes.length;
-            document.getElementById('count-concluidos').innerText = concluidos.length;
-            document.getElementById('next-client').innerText = pendentes.length > 0 ? pendentes[0].nomeCliente : "Sem agenda";
+        filtrados.sort((a,b) => new Date(a.dataHora) - new Date(b.dataHora)).forEach(item => {
+            const isPendente = item.status === 'PENDENTE' || !item.status;
+            if (isPendente) pCount++; else cCount++;
 
-            pendentes.forEach(item => {
-                const dataF = new Date(item.dataHora).toLocaleString('pt-BR');
-                tbodyPendentes.innerHTML += `
-                    <tr>
-                        <td class="check-col"><input type="checkbox" class="row-checkbox" value="${item.id}" onclick="atualizarBarraBulk()"></td>
-                        <td><strong>${item.nomeCliente}</strong><br><small style="color:#888">${item.contato}</small></td>
-                        <td>${item.tipoServico}</td>
-                        <td>${dataF}</td>
-                        <td><span class="badge badge-pending">Pendente</span></td>
-                        <td class="actions">
-                            <button title="Concluir" onclick="acao(${item.id}, 'concluir', 'PATCH')" class="btn-action btn-done"><i class="fas fa-check"></i></button>
-                            <button title="Excluir" onclick="acao(${item.id}, 'excluir', 'DELETE')" class="btn-action btn-del"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
-            });
+            const dataF = new Date(item.dataHora).toLocaleString('pt-BR');
+            tbody.innerHTML += `
+                <tr>
+                    <td class="check-col">${isPendente ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onclick="atualizarBarraBulk()">` : ''}</td>
+                    <td><strong>${item.nomeCliente}</strong><br><small style="color:#888">${item.contato}</small></td>
+                    <td>${item.tipoServico}</td>
+                    <td>${dataF}</td>
+                    <td><span class="badge ${isPendente ? 'badge-pending' : 'badge-success'}">${isPendente ? 'Pendente' : 'Concluído'}</span></td>
+                    <td class="actions">
+                        ${isPendente ? `<button onclick="acao(${item.id}, 'concluir', 'PATCH')" class="btn-action btn-done"><i class="fas fa-check"></i></button>` : ''}
+                        <button onclick="acao(${item.id}, 'excluir', 'DELETE')" class="btn-action btn-del"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+        });
 
-            concluidos.forEach(item => {
-                const dataF = new Date(item.dataHora).toLocaleString('pt-BR');
-                tbodyHistorico.innerHTML += `
-                    <tr>
-                        <td><strong>${item.nomeCliente}</strong><br><small style="color:#888">${item.contato}</small></td>
-                        <td>${item.tipoServico}</td>
-                        <td>${dataF}</td>
-                        <td><span class="badge badge-success">Concluído</span></td>
-                    </tr>`;
-            });
-        } catch (e) {
-            console.error(e);
-            Swal.fire('Erro', 'Não foi possível conectar ao servidor.', 'error');
-        } finally {
-            btn.innerHTML = originalText;
-        }
+        document.getElementById('count-pendentes').innerText = pCount;
+        document.getElementById('count-concluidos').innerText = cCount;
+        const prox = filtrados.find(i => i.status === 'PENDENTE' || !i.status);
+        document.getElementById('next-client').innerText = prox ? prox.nomeCliente : "-";
     }
 
     async function acao(id, tipo, metodo) {
-        const config = {
-            concluir: { title: 'Marcar como Concluído?', text: 'Mover para o histórico.', icon: 'question', url: `/api/agendamentos/${id}/concluir` },
-            excluir: { title: 'Excluir Agendamento?', text: 'Ação irreversível.', icon: 'warning', url: `/api/agendamentos/${id}` }
-        };
-
-        const result = await Swal.fire({
-            title: config[tipo].title,
-            text: config[tipo].text,
-            icon: config[tipo].icon,
-            showCancelButton: true,
-            confirmButtonColor: tipo === 'excluir' ? '#dc3545' : '#28a745',
-            confirmButtonText: 'Confirmar'
-        });
-
-        if (result.isConfirmed) {
-            try {
-                const res = await fetch(config[tipo].url, { method: metodo, credentials: 'include' });
-                if (res.ok) { carregar(); }
-            } catch (err) { Swal.fire('Erro', 'Falha no servidor.', 'error'); }
+        const confirm = await Swal.fire({ title: 'Tem certeza?', icon: 'question', showCancelButton: true });
+        if (confirm.isConfirmed) {
+            const url = tipo === 'excluir' ? `/api/agendamentos/${id}` : `/api/agendamentos/${id}/concluir`;
+            await fetch(url, { method: metodo, credentials: 'include' });
+            carregar();
         }
     }
 
-    async function logout() {
-        try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch (e) {}
+    function logout() {
         localStorage.removeItem('sessao_emylle');
         window.location.replace('login.html');
     }

@@ -260,13 +260,19 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
+                // Códigos Unicode para evitar o símbolo de interrogação (?)
+                const iconNome = "\uD83D\uDC64"; // 👤
+                const iconData = "\uD83D\uDCC5"; // 📅
+                const iconHora = "\u23F0";     // ⏰
+                const iconFone = "\uD83D\uDCDE"; // 📞
+
                 const textoMensagem =
                     "*Novo Agendamento - Site*\n\n" +
                     "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
-                    "👤 *Nome:* " + nome + "\n" +
-                    "📅 *Data sugerida:* " + dataFormatada + "\n" +
-                    "⏰ *Horário:* " + hora + "\n" +
-                    "📞 *Contato:* " + whats + "\n\n" +
+                    iconNome + " *Nome:* " + nome + "\n" +
+                    iconData + " *Data sugerida:* " + dataFormatada + "\n" +
+                    iconHora + " *Horário:* " + hora + "\n" +
+                    iconFone + " *Contato:* " + whats + "\n\n" +
                     "Aguardo seu retorno!";
 
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
