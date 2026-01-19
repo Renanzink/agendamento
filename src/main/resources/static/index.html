@@ -258,25 +258,23 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Quebras de linha e emojis já codificados em formato de URL (Hexadecimal)
-                // O navegador NÃO consegue estragar esses códigos.
-                const n = "%0A";
-                const iconUser  = "%F0%9F%91%A4"; // 👤
-                const iconCal   = "%F0%9F%93%85"; // 📅
-                const iconClock = "%E2%8F%B0";    // ⏰
-                const iconPhone = "%F0%9F%93%9E"; // 📞
+                // Códigos exatos dos emojis que você mandou, em formato URL-SAFE
+                const iUser  = "%F0%9F%91%A4"; // 👤
+                const iWork  = "%F0%9F%92%BC"; // 💼
+                const iCal   = "%F0%9F%93%85"; // 📅
+                const iClock = "%E2%83%B0";    // ⏰
+                const n      = "%0A";          // Quebra de linha
 
-                // Montamos a mensagem concatenando as strings codificadas com os valores do formulário
-                const textoFinal =
+                // Montamos a URL "colando" as peças.
+                // NÃO usamos encodeURIComponent na mensagem toda, para o navegador não mexer nos emojis.
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" +
                     "*Novo Agendamento - Site*" + n + n +
                     "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:" + n + n +
-                    iconUser + " *Nome:* " + encodeURIComponent(nome) + n +
-                    iconCal + " *Data sugerida:* " + encodeURIComponent(dataFormatada) + n +
-                    iconClock + " *Horário:* " + encodeURIComponent(hora) + n +
-                    iconPhone + " *Contato:* " + encodeURIComponent(whats) + n + n +
+                    iUser + " *Nome:* " + encodeURIComponent(nome) + n +
+                    iWork + " *Serviço:* Solicitação de Projeto" + n +
+                    iCal  + " *Data sugerida:* " + encodeURIComponent(dataFormatada) + n +
+                    iClock + " *Horário:* " + encodeURIComponent(hora) + n + n +
                     "Aguardo seu retorno!";
-
-                const urlWhats = "https://wa.me/" + numWhats + "?text=" + textoFinal;
 
                 Swal.fire({
                     title: 'Enviado com Sucesso!',
