@@ -214,7 +214,6 @@
         }
     });
 
-
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const navMenu = document.getElementById('nav-menu');
     mobileBtn.addEventListener('click', () => {
@@ -257,19 +256,23 @@
             });
 
             if (response.ok) {
-                // Usando decodeURIComponent para que o navegador gere o emoji em tempo real
-                const iconUser = decodeURIComponent('%F0%9F%91%A4'); // 👤
-                const iconCal  = decodeURIComponent('%F0%9F%93%85'); // 📅
-                const iconClock = decodeURIComponent('%E2%8F%B0');    // ⏰
-                const iconPhone = decodeURIComponent('%F0%9F%93%9E'); // 📞
+                // VARIAVEL NUMERO WHATSAPP ADICIONADA AQUI
+                const numWhats = "5573991360438";
+
+                // EMOJIS CODIFICADOS DIRETAMENTE PARA EVITAR ERRO DE UTF-8
+                const u = (code) => decodeURIComponent(code);
+                const iUser = u('%F0%9F%91%A4');
+                const iCal  = u('%F0%9F%93%85');
+                const iClock = u('%E2%8F%B0');
+                const iPhone = u('%F0%9F%93%9E');
 
                 const textoMensagem =
                     "*Novo Agendamento - Site*\n\n" +
                     "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
-                    iconUser + " *Nome:* " + nome + "\n" +
-                    iconCal + " *Data sugerida:* " + dataFormatada + "\n" +
-                    iconClock + " *Horário:* " + hora + "\n" +
-                    iconPhone + " *Contato:* " + whats + "\n\n" +
+                    iUser + " *Nome:* " + nome + "\n" +
+                    iCal + " *Data sugerida:* " + dataFormatada + "\n" +
+                    iClock + " *Horário:* " + hora + "\n" +
+                    iPhone + " *Contato:* " + whats + "\n\n" +
                     "Aguardo seu retorno!";
 
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
