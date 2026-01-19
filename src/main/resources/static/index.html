@@ -154,12 +154,45 @@
 
 <section id="portfolio">
     <div class="grid-portfolio">
-        <div class="portfolio-item reveal"><img src="/images/projeto11.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Conceito Aberto</h3></div></div>
-        <div class="portfolio-item reveal"><img src="/images/projeto12.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Suíte Master</h3></div></div>
-        <div class="portfolio-item reveal"><img src="/images/projeto1.jpg" class="portfolio-img"><div class="portfolio-overlay"><h3>Living Luxo</h3></div></div>
-        <div class="portfolio-item reveal"><img src="/images/projeto8.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Espaço Gourmet</h3></div></div>
-        <div class="portfolio-item reveal"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000" class="portfolio-img"><div class="portfolio-overlay"><h3>Modernidade</h3></div></div>
-        <div class="portfolio-item reveal"><img src="https://images.unsplash.com/photo-1600607687940-47a04b62d730?q=80&w=1000" class="portfolio-img"><div class="portfolio-overlay"><h3>Refúgio Urbano</h3></div></div>
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto1.jpg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Refúgio Particular</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto4.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Diálogo Amadeirado</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto11.jpg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Essência Orgânica</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto3.jpg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Equilíbrio Contemporâneo</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto1.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Ninho de Afeto</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto8.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Identidade Profissional</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto9.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Foco & Fluidez</h3></div>
+        </div>
+
+        <div class="portfolio-item reveal">
+            <img src="/images/projeto10.jpeg" class="portfolio-img">
+            <div class="portfolio-overlay"><h3>Santuário de Repouso</h3></div>
+        </div>
     </div>
 </section>
 
@@ -212,16 +245,19 @@
 </footer>
 
 <script>
+    // Controle do tamanho da Navbar ao rolar
     window.addEventListener('scroll', () => {
         document.getElementById('navbar').style.height = window.scrollY > 50 ? '80px' : '100px';
     });
 
+    // Menu Mobile
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const navMenu = document.getElementById('nav-menu');
     mobileBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
     });
 
+    // Animação de Surgimento (Reveal)
     function reveal() {
         document.querySelectorAll(".reveal").forEach(el => {
             if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
@@ -230,6 +266,7 @@
     window.addEventListener("scroll", reveal);
     window.onload = reveal;
 
+    // Lógica do Formulário e WhatsApp
     document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const nome = document.getElementById('nome').value;
@@ -249,7 +286,12 @@
         };
 
         try {
-            Swal.fire({ title: 'Enviando...', text: 'Salvando sua solicitação.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+            Swal.fire({
+                title: 'Enviando...',
+                text: 'Salvando sua solicitação.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading() }
+            });
 
             const response = await fetch('/api/agendamentos', {
                 method: 'POST',
@@ -260,20 +302,18 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Códigos Unicode para evitar o símbolo de interrogação (?)
-                const iconNome = "\uD83D\uDC64"; // 👤
-                const iconData = "\uD83D\uDCC5"; // 📅
-                const iconHora = "\u23F0";     // ⏰
-                const iconFone = "\uD83D\uDCDE"; // 📞
+                // Mensagem formatada com emojis direto nas crases (Template Strings)
+                // Isso preserva os caracteres especiais UTF-8 para o WhatsApp
+                const textoMensagem = `*Novo Agendamento - Site*
 
-                const textoMensagem =
-                    "*Novo Agendamento - Site*\n\n" +
-                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
-                    iconNome + " *Nome:* " + nome + "\n" +
-                    iconData + " *Data sugerida:* " + dataFormatada + "\n" +
-                    iconHora + " *Horário:* " + hora + "\n" +
-                    iconFone + " *Contato:* " + whats + "\n\n" +
-                    "Aguardo seu retorno!";
+Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:
+
+👤 *Nome:* ${nome}
+📅 *Data sugerida:* ${dataFormatada}
+⏰ *Horário:* ${hora}
+📞 *Contato:* ${whats}
+
+Aguardo seu retorno!`;
 
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
 
