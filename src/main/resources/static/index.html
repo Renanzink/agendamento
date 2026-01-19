@@ -258,24 +258,19 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Montando partes do texto já codificadas para WhatsApp
-                const quebra = "%0A";
-                const iconUser = "%F0%9F%91%A4"; // 👤
-                const iconCal  = "%F0%9F%93%85"; // 📅
-                const iconClock = "%E2%8F%B0";   // ⏰
-                const iconPhone = "%F0%9F%93%9E"; // 📞
-
-                // Montamos a URL sem usar encodeURIComponent no texto todo, pois as partes já estão prontas
-                const textoFinal =
-                    "*Novo Agendamento - Site*" + quebra + quebra +
-                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:" + quebra + quebra +
-                    iconUser + " *Nome:* " + encodeURIComponent(nome) + quebra +
-                    iconCal + " *Data sugerida:* " + encodeURIComponent(dataFormatada) + quebra +
-                    iconClock + " *Horário:* " + encodeURIComponent(hora) + quebra +
-                    iconPhone + " *Contato:* " + encodeURIComponent(whats) + quebra + quebra +
+                // Montando a mensagem com emojis diretos.
+                // O wa.me cuida da conversão de forma muito mais eficiente.
+                const textoMensagem =
+                    "*Novo Agendamento - Site*\n\n" +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
+                    "👤 *Nome:* " + nome + "\n" +
+                    "📅 *Data sugerida:* " + dataFormatada + "\n" +
+                    "⏰ *Horário:* " + hora + "\n" +
+                    "📞 *Contato:* " + whats + "\n\n" +
                     "Aguardo seu retorno!";
 
-                const urlWhats = "https://wa.me/" + numWhats + "?text=" + textoFinal;
+                // Gerando a URL com wa.me (Evita o erro de "scheme handler")
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
 
                 Swal.fire({
                     title: 'Enviado com Sucesso!',
@@ -284,6 +279,7 @@
                     confirmButtonText: 'Ir para WhatsApp',
                     confirmButtonColor: '#b05e41'
                 }).then(() => {
+                    // Tenta abrir em uma nova aba
                     window.open(urlWhats, '_blank');
                     this.reset();
                 });
