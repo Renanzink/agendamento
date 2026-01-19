@@ -88,7 +88,7 @@
         .portfolio-item:hover .portfolio-overlay { opacity: 1; }
         .portfolio-overlay h3 { color: white; font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 0; }
 
-        /* MANIFESTO - TEXTO ORIGINAL MANTIDO */
+        /* MANIFESTO */
         #manifesto { padding: 120px 10%; background: var(--bg); text-align: center; }
         .manifesto-content { max-width: 900px; margin: 0 auto; }
         .manifesto-text {
@@ -208,12 +208,14 @@
 </footer>
 
 <script>
+    // Configurações da Navbar
     window.addEventListener('scroll', () => {
         if(window.innerWidth > 768) {
             document.getElementById('navbar').style.height = window.scrollY > 50 ? '80px' : '100px';
         }
     });
 
+    // Menu Mobile
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const navMenu = document.getElementById('nav-menu');
     mobileBtn.addEventListener('click', () => {
@@ -222,6 +224,7 @@
         mobileBtn.querySelector('i').classList.toggle('fa-times');
     });
 
+    // Animações de Scroll
     function reveal() {
         document.querySelectorAll(".reveal").forEach(el => {
             if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
@@ -230,6 +233,7 @@
     window.addEventListener("scroll", reveal);
     window.onload = reveal;
 
+    // Lógica do WhatsApp com Unicode para Emojis
     document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const nome = document.getElementById('nome').value;
@@ -259,17 +263,13 @@
 
             if (response.ok) {
                 const numWhats = "5573991360438";
+                // Códigos Unicode para garantir que os emojis funcionem em qualquer lugar
+                const iconUser = "\uD83D\uDC64"; // 👤
+                const iconCal = "\uD83D\uDCC5";  // 📅
+                const iconClock = "\u23F0";      // ⏰
+                const iconPhone = "\uD83D\uDCDE"; // 📞
+                const n = "\n";
 
-                // Usando constantes de texto para garantir a formatação limpa
-                const quebra = "\n";
-                const iconUser = "\uD83D\uDC64"; // Bonequinho 👤
-                const iconCal = "\uD83D\uDCC5";  // Calendário 📅
-                const iconClock = "\u23F0";      // Relógio ⏰
-                const iconPhone = "\uD83D\uDCDE"; // Telefone 📞
-
-                const numWhats = "5573991360438";
-
-                // Montando a mensagem com escape de URL direto para evitar o erro
                 let mensagemAgendamento = "*Novo Agendamento - Site*\n\n";
                 mensagemAgendamento += "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n";
                 mensagemAgendamento += "👤 *Nome:* " + nome + "\n";
