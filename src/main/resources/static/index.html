@@ -11,18 +11,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
-        /* VARIÁVEIS DE CORES */
         :root {
             --primary: #2d2a26;
             --accent: #b05e41;
             --accent-hover: #8e4a32;
             --bg: #fdfaf8;
             --white: #ffffff;
-            --text-muted: #7a736d;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* RESET E BASE */
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -33,155 +30,73 @@
             overflow-x: hidden;
         }
 
-        /* NAVBAR PROFISSIONAL */
+        /* NAVBAR */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.98);
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(176, 94, 65, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; height: 100px; background-color: rgba(255, 255, 255, 0.98);
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(176, 94, 65, 0.1);
             transition: var(--transition);
         }
-
-        .logo-wrapper { height: 100%; display: flex; align-items: center; }
 
         .nav-logo-img {
-            height: 140px;
-            width: auto;
-            border-radius: 60px;
-            border: 4px solid white;
-            object-fit: cover;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            transform: translateY(20px);
-            transition: var(--transition);
+            height: 140px; width: auto; border-radius: 60px; border: 4px solid white;
+            object-fit: cover; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: white; transform: translateY(20px); transition: var(--transition);
         }
 
-        /* MENU DESKTOP */
         .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--primary);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--accent); }
+        .nav-links a { text-decoration: none; color: var(--primary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-admin { border: 1.5px solid var(--accent); color: var(--accent) !important; padding: 8px 18px; border-radius: 4px; }
+        .mobile-menu-icon { display: none; font-size: 1.5rem; color: var(--accent); cursor: pointer; }
 
-        .btn-admin {
-            border: 1.5px solid var(--accent);
-            color: var(--accent) !important;
-            padding: 8px 18px;
-            border-radius: 4px;
-        }
-
-        /* MENU MOBILE */
-        .mobile-menu-icon {
-            display: none;
-            font-size: 1.5rem;
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        /* HERO SECTION */
+        /* HERO */
         #home {
             height: 100vh;
             background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
             url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000') no-repeat center center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px;
         }
 
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            margin: 20px 0;
-        }
-
-        /* HISTORIA */
-        #historia { padding: 100px 10%; text-align: center; background: var(--bg); }
-        .history-text { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 4rem); color: #555; }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 20px 0; }
 
         /* PORTFÓLIO */
         #portfolio { padding: 100px 5%; background: var(--white); }
-        .portfolio-header { text-align: center; margin-bottom: 60px; }
-        .grid-portfolio {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .portfolio-item {
-            position: relative;
-            height: 500px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
+        .grid-portfolio { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
+        .portfolio-item { position: relative; height: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .portfolio-img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; }
         .portfolio-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 30px; opacity: 0; transition: 0.5s;
+            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; opacity: 0; transition: 0.5s;
         }
         .portfolio-item:hover .portfolio-img { transform: scale(1.1); }
         .portfolio-item:hover .portfolio-overlay { opacity: 1; }
         .portfolio-overlay h3 { color: white; font-family: 'Playfair Display', serif; margin: 0; }
-        .portfolio-overlay p { color: #ddd; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* REVEAL ON SCROLL */
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* AGENDAMENTO */
         #agendamento { padding: 100px 5%; background: var(--bg); }
         .agendamento-container { max-width: 800px; margin: 0 auto; }
-
-        input, select {
-            width: 100%; padding: 15px; margin-bottom: 20px;
-            border: none; border-bottom: 1px solid #ddd;
-            background: transparent; outline: none; transition: 0.3s;
-            font-family: 'Montserrat', sans-serif;
-        }
-        input:focus, select:focus { border-bottom: 2px solid var(--accent); }
-
+        input, select { width: 100%; padding: 15px; margin-bottom: 20px; border: none; border-bottom: 1px solid #ddd; background: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
         .form-row { display: flex; gap: 15px; }
         .form-group { flex: 1; display: flex; flex-direction: column; }
         .form-group label { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 5px; }
-
-        .btn-enviar {
-            width: 100%; padding: 20px; background: var(--accent);
-            color: white; border: none; font-weight: 600; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
-        }
+        .btn-enviar { width: 100%; padding: 20px; background: var(--accent); color: white; border: none; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .btn-enviar:hover { background: var(--accent-hover); }
 
         /* FOOTER */
         footer { background: var(--primary); color: white; padding: 80px 5% 40px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .footer-box h4 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--accent); margin-bottom: 20px; }
-        .footer-box p, .footer-box a { color: #ccc; text-decoration: none; font-size: 0.9rem; margin-bottom: 10px; display: block; }
+        .footer-box h4 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 20px; }
+        .footer-box a { color: #ccc; text-decoration: none; display: block; margin-bottom: 10px; }
         .social-icons { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
-        .social-icons a { font-size: 1.5rem; color: white; transition: 0.3s; }
-        .social-icons a:hover { color: var(--accent); }
+        .social-icons a { font-size: 1.5rem; color: white; }
 
-        /* RESPONSIVIDADE */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
         @media (max-width: 968px) {
             .mobile-menu-icon { display: block; }
-            .nav-links {
-                position: fixed; top: 100px; right: -100%; width: 100%; height: calc(100vh - 100px);
-                background: white; flex-direction: column; padding: 40px; transition: 0.4s; text-align: center;
-            }
+            .nav-links { position: fixed; top: 100px; right: -100%; width: 100%; height: calc(100vh - 100px); background: white; flex-direction: column; padding: 40px; transition: 0.4s; }
             .nav-links.active { right: 0; }
             .nav-logo-img { height: 80px; transform: translateY(0); }
             .form-row { flex-direction: column; gap: 0; }
@@ -191,57 +106,28 @@
 <body>
 
 <nav id="navbar">
-    <a href="#home" class="logo-wrapper">
-        <img src="/images/projeto6.jpeg" class="nav-logo-img" alt="Logo">
-    </a>
-
-    <div class="mobile-menu-icon" id="mobile-menu-btn">
-        <i class="fas fa-bars"></i>
-    </div>
-
+    <a href="#home" class="logo-wrapper"><img src="/images/projeto6.jpeg" class="nav-logo-img"></a>
+    <div class="mobile-menu-icon" id="mobile-menu-btn"><i class="fas fa-bars"></i></div>
     <div class="nav-links" id="nav-menu">
         <a href="#home">Início</a>
-        <a href="#historia">Essência</a>
         <a href="#portfolio">Portfólio</a>
         <a href="#agendamento">Contato</a>
-        <a href="login.html" class="btn-admin">Membro</a>
+        <a href="admin.html" class="btn-admin">Membro</a>
     </div>
 </nav>
 
 <section id="home">
-    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; text-transform: uppercase; color: var(--accent); font-size: 0.7rem;">Design Atemporal</p>
+    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; color: var(--accent); font-size: 0.7rem; text-transform: uppercase;">Design Atemporal</p>
     <h1 class="hero-title animate__animated animate__fadeIn">Arquitetura que<br>conta histórias.</h1>
     <a href="#agendamento" class="btn-enviar" style="max-width: 300px; text-decoration: none; text-align: center;">Agendar Consultoria</a>
 </section>
 
-<section id="historia">
-    <div class="history-text reveal">
-        Projetamos ambientes onde o <strong>luxo</strong> encontra a <strong>funcionalidade</strong>.
-    </div>
-</section>
-
 <section id="portfolio">
-    <div class="portfolio-header reveal">
-        <p style="letter-spacing: 5px; color: var(--accent); font-size: 0.7rem; text-transform: uppercase;">Trabalhos Recentes</p>
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem;">Portfólio</h2>
-    </div>
     <div class="grid-portfolio">
-        <div class="portfolio-item reveal">
-            <img src="/images/projeto11.png" class="portfolio-img">
-            <div class="portfolio-overlay"><h3>Conceito Aberto</h3><p>Residencial</p></div>
-        </div>
-        <div class="portfolio-item reveal" style="transition-delay: 0.1s;">
-            <img src="/images/projeto12.png" class="portfolio-img">
-            <div class="portfolio-overlay"><h3>Suíte Master</h3><p>Interiores</p></div>
-        </div>
-        <div class="portfolio-item reveal" style="transition-delay: 0.2s;">
-            <img src="/images/projeto1.jpg" class="portfolio-img">
-            <div class="portfolio-overlay"><h3>Living Luxo</h3><p>Mobiliário</p></div>
-        </div>
-        <div class="portfolio-item reveal" style="transition-delay: 0.3s;">
-            <img src="/images/projeto8.png" class="portfolio-img">
-            <div class="portfolio-overlay"><h3>Espaço Gourmet</h3><p>Lazer</p></div>
-        </div>
+        <div class="portfolio-item reveal"><img src="/images/projeto11.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Conceito Aberto</h3></div></div>
+        <div class="portfolio-item reveal"><img src="/images/projeto12.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Suíte Master</h3></div></div>
+        <div class="portfolio-item reveal"><img src="/images/projeto1.jpg" class="portfolio-img"><div class="portfolio-overlay"><h3>Living Luxo</h3></div></div>
+        <div class="portfolio-item reveal"><img src="/images/projeto8.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Espaço Gourmet</h3></div></div>
     </div>
 </section>
 
@@ -257,10 +143,10 @@
                 <option value="Projeto Residencial">Projeto Residencial</option>
             </select>
             <div class="form-row">
-                <div class="form-group"><label>Data Sugerida</label><input type="date" id="data" required></div>
-                <div class="form-group"><label>Horário</label><input type="time" id="hora" value="09:00" required></div>
+                <div class="form-group"><label>Data</label><input type="date" id="data" required></div>
+                <div class="form-group"><label>Hora</label><input type="time" id="hora" value="09:00" required></div>
             </div>
-            <button type="submit" class="btn-enviar">Solicitar Orçamento</button>
+            <button type="submit" class="btn-enviar">Enviar via WhatsApp</button>
         </form>
     </div>
 </section>
@@ -269,76 +155,100 @@
     <div class="footer-grid">
         <div class="footer-box">
             <h4>Contato</h4>
-            <p><i class="fas fa-envelope"></i> contato@emyllearquitetura.com.br</p>
-            <p><i class="fas fa-phone"></i> (73) 99136-0438</p>
-            <p><i class="fas fa-map-marker-alt"></i> Eunápolis, Bahia</p>
+            <p>(73) 99136-0438</p>
+            <p>contato@emyllearquitetura.com.br</p>
         </div>
         <div class="footer-box">
-            <h4>Redes Sociais</h4>
+            <h4>Redes</h4>
             <div class="social-icons">
-                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.instagram.com/arqemyllesalles/" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
                 <a href="#"><i class="fab fa-pinterest"></i></a>
             </div>
         </div>
-        <div class="footer-box">
-            <h4>Navegação</h4>
-            <a href="#home">Início</a>
-            <a href="#portfolio">Portfólio</a>
-            <a href="#agendamento">Contato</a>
-        </div>
     </div>
-    <div style="text-align: center; margin-top: 50px; opacity: 0.5; font-size: 0.7rem;">&copy; 2026 EMYLLE ARQUITETURA.</div>
 </footer>
 
 <script>
-    // NAVBAR SCROLL EFFECT
+    // NAVBAR SCROLL
     window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        navbar.style.height = window.scrollY > 50 ? '80px' : '100px';
+        document.getElementById('navbar').style.height = window.scrollY > 50 ? '80px' : '100px';
     });
 
-    // MOBILE MENU
+    // MENU MOBILE
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const navMenu = document.getElementById('nav-menu');
     mobileBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
-        mobileBtn.querySelector('i').classList.toggle('fa-bars');
-        mobileBtn.querySelector('i').classList.toggle('fa-times');
     });
 
-    // REVEAL ON SCROLL
+    // REVEAL
     function reveal() {
         document.querySelectorAll(".reveal").forEach(el => {
             if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
         });
     }
     window.addEventListener("scroll", reveal);
+    window.onload = reveal;
 
-    // FORM LOGIC
-    document.getElementById('agendamentoForm').addEventListener('submit', function(e) {
+    // LÓGICA UNIFICADA: ENVIA PARA O BACK-END + WHATSAPP
+    document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const agendamento = {
-            id: Date.now(),
-            nome: document.getElementById('nome').value,
-            whatsapp: document.getElementById('whatsapp').value,
-            servico: document.getElementById('servico').value,
-            data: document.getElementById('data').value,
-            hora: document.getElementById('hora').value,
-            status: 'Pendente'
+        // 1. Captura os valores
+        const nome = document.getElementById('nome').value;
+        const whats = document.getElementById('whatsapp').value;
+        const servico = document.getElementById('servico').value;
+        const data = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+
+        // 2. Formata para o LocalDateTime do Java (ISO 8601)
+        const dataHoraISO = `${data}T${hora}:00`;
+
+        // 3. Monta o objeto exatamente como seu Model "Agendamento" no Java
+        const dadosAgendamento = {
+            nomeCliente: nome,
+            contato: whats,
+            tipoServico: servico,
+            dataHora: dataHoraISO,
+            status: "PENDENTE"
         };
 
-        let lista = JSON.parse(localStorage.getItem('agendamentos')) || [];
-        lista.push(agendamento);
-        localStorage.setItem('agendamentos', JSON.stringify(lista));
+        try {
+            // Mostra um carregando para o usuário
+            Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
 
-        Swal.fire({
-            title: 'Solicitação Enviada!',
-            text: 'Entraremos em contato em breve.',
-            icon: 'success',
-            confirmButtonColor: '#b05e41'
-        });
-        this.reset();
+            // 4. ENVIO PARA O BACK-END (Isso aciona o EmailService e o WhatsAppService do Spring)
+            const response = await fetch('http://localhost:8080/api/agendamentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosAgendamento)
+            });
+
+            if (response.ok) {
+                // 5. Se o Back-end salvou com sucesso, abre o WhatsApp do cliente
+                const numWhats = "5573991360438";
+                const mensagem = `Olá Emylle! Acabei de solicitar um agendamento de ${servico} pelo site.`;
+                const urlWhats = `https://wa.me/${numWhats}?text=${encodeURIComponent(mensagem)}`;
+
+                Swal.fire({
+                    title: 'Sucesso!',
+                    text: 'Agendamento salvo. Agora confirme no WhatsApp.',
+                    icon: 'success',
+                    confirmButtonColor: '#b05e41'
+                }).then(() => {
+                    window.open(urlWhats, '_blank');
+                    this.reset();
+                });
+            } else {
+                const erro = await response.json();
+                Swal.fire('Atenção', erro.message || 'Erro ao salvar agendamento.', 'warning');
+            }
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            Swal.fire('Erro', 'O servidor está desligado ou inacessível.', 'error');
+        }
     });
 </script>
 </body>
