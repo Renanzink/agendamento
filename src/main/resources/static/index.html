@@ -60,7 +60,22 @@
 
         .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 20px 0; }
 
-        /* PORTFÓLIO - 6 PROJETOS */
+        .btn-hero {
+            max-width: 300px;
+            text-decoration: none;
+            text-align: center;
+            padding: 20px 40px;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+        .btn-hero:hover { background: var(--accent); color: white; }
+
+        /* PORTFÓLIO */
         #portfolio { padding: 100px 5%; background: var(--white); }
         .grid-portfolio { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
         .portfolio-item { position: relative; height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
@@ -73,18 +88,17 @@
         .portfolio-item:hover .portfolio-overlay { opacity: 1; }
         .portfolio-overlay h3 { color: white; font-family: 'Playfair Display', serif; margin: 0; }
 
-        /* MANIFESTO SECTION */
+        /* MANIFESTO */
         #manifesto { padding: 120px 10%; background: var(--bg); text-align: center; }
         .manifesto-content { max-width: 900px; margin: 0 auto; }
         .manifesto-text {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            line-height: 1.6;
-            font-style: italic;
+            font-size: clamp(1.3rem, 3.5vw, 2rem);
+            line-height: 1.8;
             color: var(--primary);
         }
         .manifesto-signature {
-            margin-top: 40px;
+            margin-top: 50px;
             text-transform: uppercase;
             letter-spacing: 4px;
             color: var(--accent);
@@ -95,7 +109,7 @@
         /* AGENDAMENTO */
         #agendamento { padding: 100px 5%; background: var(--white); }
         .agendamento-container { max-width: 800px; margin: 0 auto; }
-        input, select { width: 100%; padding: 15px; margin-bottom: 20px; border: none; border-bottom: 1px solid #ddd; background: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border: none; border-bottom: 1px solid #ddd; background: transparent; outline: none; font-family: 'Montserrat', sans-serif; }
         .form-row { display: flex; gap: 15px; }
         .form-group { flex: 1; display: flex; flex-direction: column; }
         .form-group label { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 5px; }
@@ -134,7 +148,7 @@
 <section id="home">
     <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; color: var(--accent); font-size: 0.7rem; text-transform: uppercase;">Design Atemporal</p>
     <h1 class="hero-title animate__animated animate__fadeIn">Arquitetura que<br>conta histórias.</h1>
-    <a href="#agendamento" class="btn-enviar" style="max-width: 300px; text-decoration: none; text-align: center;">Agendar Consultoria</a>
+    <a href="#agendamento" class="btn-hero">Iniciar meu projeto</a>
 </section>
 
 <section id="portfolio">
@@ -151,13 +165,13 @@
 <section id="manifesto" class="reveal">
     <div class="manifesto-content">
         <div class="manifesto-text">
-            "Acredito que arquitetura não é apenas estética.<br>
+            Acredito que arquitetura não é apenas estética.<br>
             É intenção. É responsabilidade. É cuidado.<br><br>
             Cada projeto começa com escuta. Com entendimento da rotina, da casa e das pessoas que vão viver ali.<br><br>
             Nada é escolhido apenas pelo visual. Cada material, cada linha e cada detalhe têm um porquê.<br><br>
             Não projeto para tendências. Projeto para o tempo.<br><br>
             Para que o espaço continue fazendo sentido hoje, amanhã e daqui a muitos anos.<br><br>
-            Arquitetura é mais do que construir ambientes. É criar lugares para viver bem."
+            Arquitetura é mais do que construir ambientes. É criar lugares para viver bem.
         </div>
         <div class="manifesto-signature">Essa é a minha forma de projetar.</div>
     </div>
@@ -169,13 +183,6 @@
         <form id="agendamentoForm">
             <input type="text" id="nome" placeholder="Seu nome" required>
             <input type="tel" id="whatsapp" placeholder="Seu WhatsApp" required>
-            <select id="servico" required>
-                <option value="" disabled selected>O que você busca?</option>
-                <option value="Consultoria">Consultoria</option>
-                <option value="Projeto de Interiores">Projeto de interiores</option>
-                <option value="Projeto Completo">Projeto completo</option>
-                <option value="Projeto Residencial">Projeto Residencial</option>
-            </select>
             <div class="form-row">
                 <div class="form-group"><label>Data</label><input type="date" id="data" required></div>
                 <div class="form-group"><label>Hora</label><input type="time" id="hora" value="09:00" required></div>
@@ -225,7 +232,6 @@
         e.preventDefault();
         const nome = document.getElementById('nome').value;
         const whats = document.getElementById('whatsapp').value;
-        const servico = document.getElementById('servico').value;
         const dataRaw = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
 
@@ -235,13 +241,13 @@
         const dadosAgendamento = {
             nomeCliente: nome,
             contato: whats,
-            tipoServico: servico,
+            tipoServico: "Solicitação de Projeto",
             dataHora: dataHoraISO,
             status: "PENDENTE"
         };
 
         try {
-            Swal.fire({ title: 'Processando...', text: 'Estamos guardando suas informações.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+            Swal.fire({ title: 'Enviando...', text: 'Salvando sua solicitação.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
 
             const response = await fetch('/api/agendamentos', {
                 method: 'POST',
@@ -251,12 +257,22 @@
 
             if (response.ok) {
                 const numWhats = "5573991360438";
-                const textoMensagem = `*Novo Agendamento - Site*\n\nOlá, Emylle! Gostaria de confirmar minha solicitação:\n\n👤 *Nome:* ${nome}\n📐 *Serviço:* ${servico}\n📅 *Data sugerida:* ${dataFormatada}\n⏰ *Horário:* ${hora}\n📞 *Contato:* ${whats}\n\nAguardo seu retorno!`;
-                const urlWhats = `https://wa.me/${numWhats}?text=${encodeURIComponent(textoMensagem)}`;
+
+                // Mensagem com Emojis (👤 📅 ⏰ 📞)
+                const textoMensagem =
+                    "*Novo Agendamento - Site*\n\n" +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
+                    "👤 *Nome:* " + nome + "\n" +
+                    "📅 *Data sugerida:* " + dataFormatada + "\n" +
+                    "⏰ *Horário:* " + hora + "\n" +
+                    "📞 *Contato:* " + whats + "\n\n" +
+                    "Aguardo seu retorno!";
+
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
 
                 Swal.fire({
-                    title: 'Solicitação Enviada!',
-                    text: 'Seus dados foram salvos. Clique no botão abaixo para confirmar no WhatsApp.',
+                    title: 'Enviado com Sucesso!',
+                    text: 'Seus dados foram salvos. Agora, confirme via WhatsApp para conversarmos.',
                     icon: 'success',
                     confirmButtonText: 'Ir para WhatsApp',
                     confirmButtonColor: '#b05e41'
@@ -265,11 +281,10 @@
                     this.reset();
                 });
             } else {
-                const erro = await response.json();
-                Swal.fire('Atenção', erro.message || 'Erro ao processar.', 'warning');
+                Swal.fire('Atenção', 'Erro ao salvar agendamento.', 'warning');
             }
         } catch (error) {
-            Swal.fire('Erro', 'O servidor não respondeu. Tente novamente mais tarde.', 'error');
+            Swal.fire('Erro', 'O servidor não respondeu.', 'error');
         }
     });
 </script>
