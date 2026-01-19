@@ -257,22 +257,22 @@
             });
 
             if (response.ok) {
-                // Códigos Hexadecimais diretos para evitar erro de ""
-                const iconUser = "%F0%9F%91%A4"; // 👤
-                const iconCal = "%F0%9F%93%85";  // 📅
-                const iconClock = "%E2%83%B0";   // ⏰
-                const iconPhone = "%F0%9F%93%DE"; // 📞
-                const n = "%0A"; // Quebra de linha
+                // Usando decodeURIComponent para que o navegador gere o emoji em tempo real
+                const iconUser = decodeURIComponent('%F0%9F%91%A4'); // 👤
+                const iconCal  = decodeURIComponent('%F0%9F%93%85'); // 📅
+                const iconClock = decodeURIComponent('%E2%8F%B0');    // ⏰
+                const iconPhone = decodeURIComponent('%F0%9F%93%9E'); // 📞
 
-                const texto = `*Novo Agendamento - Site*${n}${n}` +
-                    `Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:${n}${n}` +
-                    `${iconUser} *Nome:* ${nome}${n}` +
-                    `${iconCal} *Data sugerida:* ${dataFormatada}${n}` +
-                    `${iconClock} *Horário:* ${hora}${n}` +
-                    `${iconPhone} *Contato:* ${whats}${n}${n}` +
-                    `Aguardo seu retorno!`;
+                const textoMensagem =
+                    "*Novo Agendamento - Site*\n\n" +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
+                    iconUser + " *Nome:* " + nome + "\n" +
+                    iconCal + " *Data sugerida:* " + dataFormatada + "\n" +
+                    iconClock + " *Horário:* " + hora + "\n" +
+                    iconPhone + " *Contato:* " + whats + "\n\n" +
+                    "Aguardo seu retorno!";
 
-                const urlWhats = `https://wa.me/5573991360438?text=${texto}`;
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
 
                 Swal.fire({
                     title: 'Enviado com Sucesso!',
