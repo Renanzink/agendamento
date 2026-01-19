@@ -258,23 +258,20 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Emojis em Unicode Puro para blindar o código contra erros de codificação de arquivo
-                const iconUser = "\uD83D\uDC64"; // 👤
-                const iconCal  = "\uD83D\uDCC5"; // 📅
-                const iconClock = "\u23F0";      // ⏰
-                const iconPhone = "\uD83D\uDCDE"; // 📞
+                // BLINDAGEM TOTAL: Usando pontos de código numéricos (Hexadecimal)
+                // O navegador converte isso em emoji apenas na hora do clique
+                const iUser  = String.fromCodePoint(0x1F464); // 👤
+                const iCal   = String.fromCodePoint(0x1F4C5); // 📅
+                const iClock = String.fromCodePoint(0x23F0);  // ⏰
+                const iPhone = String.fromCodePoint(0x1F4DE); // 📞
 
-                // Montagem da mensagem usando Template Strings com quebras de linha preservadas
-                const msg = `*Novo Agendamento - Site*
-
-Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:
-
-${iconUser} *Nome:* ${nome}
-${iconCal} *Data sugerida:* ${dataFormatada}
-${iconClock} *Horário:* ${hora}
-${iconPhone} *Contato:* ${whats}
-
-Aguardo seu retorno!`;
+                const msg = "*Novo Agendamento - Site*\n\n" +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
+                    iUser + " *Nome:* " + nome + "\n" +
+                    iCal + " *Data sugerida:* " + dataFormatada + "\n" +
+                    iClock + " *Horário:* " + hora + "\n" +
+                    iPhone + " *Contato:* " + whats + "\n\n" +
+                    "Aguardo seu retorno!";
 
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(msg);
 
