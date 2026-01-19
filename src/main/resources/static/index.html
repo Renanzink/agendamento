@@ -221,7 +221,7 @@
             Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
 
             // 4. ENVIO PARA O BACK-END (Isso aciona o EmailService e o WhatsAppService do Spring)
-            const response = await fetch('https://sua-app.koyeb.app/api/agendamentos', {
+            const response = await fetch('only-serene-renanzink-4e1a4911.koyeb.app/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosAgendamento)
