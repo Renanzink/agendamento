@@ -30,7 +30,7 @@
             overflow-x: hidden;
         }
 
-        /* NAVBAR - Adaptativa */
+        /* NAVBAR */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 5%; height: 100px; background-color: rgba(255, 255, 255, 0.98);
@@ -56,7 +56,6 @@
             background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.4)),
             url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000') no-repeat center center/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px;
         }
 
         .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 7vw, 4.5rem); margin: 20px 0; line-height: 1.2; }
@@ -69,7 +68,7 @@
         }
         .btn-hero:hover { background: var(--accent); color: white; }
 
-        /* PORTFÓLIO - Inteligente */
+        /* PORTFÓLIO */
         #portfolio { padding: 80px 5%; background: var(--white); }
         .grid-portfolio {
             display: grid;
@@ -89,12 +88,22 @@
         .portfolio-item:hover .portfolio-overlay { opacity: 1; }
         .portfolio-overlay h3 { color: white; font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 0; }
 
-        /* MANIFESTO */
-        #manifesto { padding: 100px 8%; background: var(--bg); text-align: center; }
+        /* MANIFESTO - TEXTO ORIGINAL MANTIDO */
+        #manifesto { padding: 120px 10%; background: var(--bg); text-align: center; }
+        .manifesto-content { max-width: 900px; margin: 0 auto; }
         .manifesto-text {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            line-height: 1.6; color: var(--primary);
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            line-height: 1.8;
+            color: var(--primary);
+        }
+        .manifesto-signature {
+            margin-top: 50px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.8rem;
         }
 
         /* AGENDAMENTO */
@@ -102,31 +111,26 @@
         .agendamento-container { max-width: 600px; margin: 0 auto; }
         input { width: 100%; padding: 15px; margin-bottom: 20px; border: none; border-bottom: 1px solid #ddd; background: transparent; outline: none; font-size: 1rem; }
         .form-row { display: flex; gap: 15px; }
-        .form-group { flex: 1; }
+        .form-group { flex: 1; display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 5px; }
         .btn-enviar { width: 100%; padding: 20px; background: var(--accent); color: white; border: none; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
 
-        /* RESPONSIVIDADE CELULAR (MODO RETRATO) */
+        /* RESPONSIVIDADE */
         @media (max-width: 768px) {
             nav { height: 70px; }
             .nav-logo-img { height: 60px; transform: translateY(0); border-radius: 30px; }
             .mobile-menu-icon { display: block; }
-
             .nav-links {
                 position: fixed; top: 70px; right: -100%; width: 100%; height: calc(100vh - 70px);
-                background: white; flex-direction: column; justify-content: center;
-                transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 999;
+                background: white; flex-direction: column; justify-content: center; transition: 0.4s; z-index: 999;
             }
             .nav-links.active { right: 0; }
-
-            .grid-portfolio { grid-template-columns: 1fr; } /* Uma coluna no celular */
-            .portfolio-item { height: 400px; } /* Altura ideal para scroll vertical */
-            .portfolio-overlay { opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); } /* Títulos visíveis no toque */
-
+            .grid-portfolio { grid-template-columns: 1fr; }
+            .portfolio-item { height: 400px; }
+            .portfolio-overlay { opacity: 1; }
             .form-row { flex-direction: column; gap: 0; }
-            #agendamento h2 { font-size: 2rem !important; }
         }
 
-        /* ANIMAÇÕES */
         .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
@@ -140,21 +144,19 @@
         <a href="#home">Início</a>
         <a href="#portfolio">Portfólio</a>
         <a href="#agendamento">Contato</a>
-        <a href="admin.html" class="btn-admin">Acesso Membro</a>
+        <a href="admin.html" class="btn-admin">Membro</a>
     </div>
 </nav>
 
 <section id="home">
-    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 6px; color: var(--accent); font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">Design Atemporal</p>
+    <p class="animate__animated animate__fadeInDown" style="letter-spacing: 8px; color: var(--accent); font-size: 0.7rem; text-transform: uppercase;">Design Atemporal</p>
     <h1 class="hero-title animate__animated animate__fadeIn">Arquitetura que<br>conta histórias.</h1>
     <a href="#agendamento" class="btn-hero">Iniciar meu projeto</a>
 </section>
 
 <section id="portfolio">
     <div class="grid-portfolio">
-        <div class="portfolio-item reveal"><img src="/images/projeto1.jpg" class="portfolio-img"><div class="portfolio-overlay"><h3>Refúgio Particular</h3></div></div>
         <div class="portfolio-item reveal"><img src="/images/projeto4.jpeg" class="portfolio-img"><div class="portfolio-overlay"><h3>Diálogo Amadeirado</h3></div></div>
-        <div class="portfolio-item reveal"><img src="/images/projeto11.png" class="portfolio-img"><div class="portfolio-overlay"><h3>Essência Orgânica</h3></div></div>
         <div class="portfolio-item reveal"><img src="/images/projeto3.jpg" class="portfolio-img"><div class="portfolio-overlay"><h3>Equilíbrio Contemporâneo</h3></div></div>
         <div class="portfolio-item reveal"><img src="/images/projeto1.jpeg" class="portfolio-img"><div class="portfolio-overlay"><h3>Ninho de Afeto</h3></div></div>
         <div class="portfolio-item reveal"><img src="/images/projeto8.jpeg" class="portfolio-img"><div class="portfolio-overlay"><h3>Identidade Profissional</h3></div></div>
@@ -166,23 +168,31 @@
 <section id="manifesto" class="reveal">
     <div class="manifesto-content">
         <div class="manifesto-text">
-            Acredito que arquitetura não é apenas estética. É intenção.<br><br>
-            Cada projeto começa com escuta. Com entendimento da rotina, da casa e das pessoas.<br><br>
-            Não projeto para tendências. Projeto para o tempo.
+            Acredito que arquitetura não é apenas estética.<br>
+            É intenção. É responsabilidade. É cuidado.<br><br>
+            Cada projeto começa com escuta.<br>
+            Com entendimento da rotina, da casa e das pessoas que vão viver ali.<br><br>
+            Nada é escolhido apenas pelo visual.<br>
+            Cada material, cada linha e cada detalhe têm um porquê.<br><br>
+            Não projeto para tendências.<br>
+            Projeto para o tempo.<br><br>
+            Para que o espaço continue fazendo sentido hoje, amanhã e daqui a muitos anos.<br><br>
+            Arquitetura é mais do que construir ambientes.<br>
+            É criar lugares para viver bem.
         </div>
-        <div style="margin-top: 40px; letter-spacing: 3px; color: var(--accent); font-weight: 600; font-size: 0.8rem; text-transform: uppercase;">Essa é a minha forma de projetar.</div>
+        <div class="manifesto-signature">Essa é a minha forma de projetar.</div>
     </div>
 </section>
 
 <section id="agendamento">
     <div class="agendamento-container reveal">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; text-align: center; margin-bottom: 30px;">Vamos conversar?</h2>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; text-align: center; margin-bottom: 40px;">Vamos conversar?</h2>
         <form id="agendamentoForm">
             <input type="text" id="nome" placeholder="Seu nome" required>
             <input type="tel" id="whatsapp" placeholder="Seu WhatsApp" required>
             <div class="form-row">
-                <div class="form-group"><label style="font-size: 0.7rem; color: var(--accent);">DATA</label><input type="date" id="data" required></div>
-                <div class="form-group"><label style="font-size: 0.7rem; color: var(--accent);">HORA</label><input type="time" id="hora" value="09:00" required></div>
+                <div class="form-group"><label>Data</label><input type="date" id="data" required></div>
+                <div class="form-group"><label>Hora</label><input type="time" id="hora" value="09:00" required></div>
             </div>
             <button type="submit" class="btn-enviar">Solicitar atendimento</button>
         </form>
@@ -198,15 +208,12 @@
 </footer>
 
 <script>
-    // Navbar scroll effect
     window.addEventListener('scroll', () => {
-        const nav = document.getElementById('navbar');
         if(window.innerWidth > 768) {
-            nav.style.height = window.scrollY > 50 ? '80px' : '100px';
+            document.getElementById('navbar').style.height = window.scrollY > 50 ? '80px' : '100px';
         }
     });
 
-    // Mobile Menu Toggle
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const navMenu = document.getElementById('nav-menu');
     mobileBtn.addEventListener('click', () => {
@@ -215,12 +222,6 @@
         mobileBtn.querySelector('i').classList.toggle('fa-times');
     });
 
-    // Close menu on click
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => navMenu.classList.remove('active'));
-    });
-
-    // Reveal animation
     function reveal() {
         document.querySelectorAll(".reveal").forEach(el => {
             if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
@@ -229,27 +230,64 @@
     window.addEventListener("scroll", reveal);
     window.onload = reveal;
 
-    // Form Logic
     document.getElementById('agendamentoForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const nome = document.getElementById('nome').value;
         const whats = document.getElementById('whatsapp').value;
-        const data = document.getElementById('data').value.split('-').reverse().join('/');
+        const dataRaw = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
 
-        Swal.fire({
-            title: 'Solicitação Enviada!',
-            text: 'Agora confirme os detalhes no WhatsApp para agilizarmos seu atendimento.',
-            icon: 'success',
-            confirmButtonText: 'Abrir WhatsApp',
-            confirmButtonColor: '#b05e41'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const msg = encodeURIComponent(`*Novo Agendamento*\n\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n⏰ *Hora:* ${hora}\n📞 *Whats:* ${whats}`);
-                window.open(`https://wa.me/5573991360438?text=${msg}`, '_blank');
-                this.reset();
+        const dataFormatada = dataRaw.split('-').reverse().join('/');
+        const dataHoraISO = `${dataRaw}T${hora}:00`;
+
+        const dadosAgendamento = {
+            nomeCliente: nome,
+            contato: whats,
+            tipoServico: "Solicitação de Projeto",
+            dataHora: dataHoraISO,
+            status: "PENDENTE"
+        };
+
+        try {
+            Swal.fire({ title: 'Enviando...', text: 'Salvando sua solicitação.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+
+            const response = await fetch('/api/agendamentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosAgendamento)
+            });
+
+            if (response.ok) {
+                const numWhats = "5573991360438";
+                const textoMensagem = `*Novo Agendamento - Site*
+
+Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:
+
+👤 *Nome:* ${nome}
+📅 *Data sugerida:* ${dataFormatada}
+⏰ *Horário:* ${hora}
+📞 *Contato:* ${whats}
+
+Aguardo seu retorno!`;
+
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
+
+                Swal.fire({
+                    title: 'Enviado com Sucesso!',
+                    text: 'Seus dados foram salvos. Agora, confirme via WhatsApp para conversarmos.',
+                    icon: 'success',
+                    confirmButtonText: 'Ir para WhatsApp',
+                    confirmButtonColor: '#b05e41'
+                }).then(() => {
+                    window.open(urlWhats, '_blank');
+                    this.reset();
+                });
+            } else {
+                Swal.fire('Atenção', 'Erro ao salvar agendamento.', 'warning');
             }
-        });
+        } catch (error) {
+            Swal.fire('Erro', 'O servidor não respondeu.', 'error');
+        }
     });
 </script>
 </body>
