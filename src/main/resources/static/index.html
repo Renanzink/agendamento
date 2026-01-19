@@ -259,16 +259,22 @@
 
             if (response.ok) {
                 const numWhats = "5573991360438";
-                const textoMensagem = `*Novo Agendamento - Site*
 
-Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:
+                // Usando constantes de texto para garantir a formatação limpa
+                const quebra = "\n";
+                const iconUser = "\uD83D\uDC64"; // Bonequinho 👤
+                const iconCal = "\uD83D\uDCC5";  // Calendário 📅
+                const iconClock = "\u23F0";      // Relógio ⏰
+                const iconPhone = "\uD83D\uDCDE"; // Telefone 📞
 
-👤 *Nome:* ${nome}
-📅 *Data sugerida:* ${dataFormatada}
-⏰ *Horário:* ${hora}
-📞 *Contato:* ${whats}
-
-Aguardo seu retorno!`;
+                const textoMensagem =
+                    "*Novo Agendamento - Site*" + quebra + quebra +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:" + quebra + quebra +
+                    iconUser + " *Nome:* " + nome + quebra +
+                    iconCal + " *Data sugerida:* " + dataFormatada + quebra +
+                    iconClock + " *Horário:* " + hora + quebra +
+                    iconPhone + " *Contato:* " + whats + quebra + quebra +
+                    "Aguardo seu retorno!";
 
                 const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(textoMensagem);
 
