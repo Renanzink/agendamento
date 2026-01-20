@@ -258,23 +258,17 @@
             if (response.ok) {
                 const numWhats = "5573991360438";
 
-                // Emojis e quebras de linha codificados diretamente (Hardcoded)
-                // O navegador não precisa processar, ele apenas cola na URL
-                const n      = "%0A";
-                const iUser  = "%F0%9F%91%A4"; // 👤
-                const iWork  = "%F0%9F%92%BC"; // 💼
-                const iCal   = "%F0%9F%93%85"; // 📅
-                const iClock = "%E2%8F%B0";    // ⏰
+                // Texto puro com negritos. Zero chance de erro.
+                const mensagem =
+                    "*Novo Agendamento - Site*\n\n" +
+                    "Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:\n\n" +
+                    "*Nome:* " + nome + "\n" +
+                    "*Serviço:* Solicitação de Projeto\n" +
+                    "*Data sugerida:* " + dataFormatada + "\n" +
+                    "*Horário:* " + hora + "\n\n" +
+                    "Aguardo seu retorno!";
 
-                // Montando a URL peça por peça
-                const urlWhats = "https://wa.me/" + numWhats + "?text=" +
-                    "%2A" + encodeURIComponent("Novo Agendamento - Site") + "%2A" + n + n +
-                    encodeURIComponent("Olá, Emylle! Gostaria de iniciar meu projeto e confirmar minha solicitação:") + n + n +
-                    iUser + "%20%2ANome%3A%2A%20" + encodeURIComponent(nome) + n +
-                    iWork + "%20%2AServi%C3%A7o%3A%2A%20" + encodeURIComponent("Solicitação de Projeto") + n +
-                    iCal  + "%20%2AData%20sugerida%3A%2A%20" + encodeURIComponent(dataFormatada) + n +
-                    iClock + "%20%2AHor%C3%A1rio%3A%2A%20" + encodeURIComponent(hora) + n + n +
-                    encodeURIComponent("Aguardo seu retorno!");
+                const urlWhats = "https://wa.me/" + numWhats + "?text=" + encodeURIComponent(mensagem);
 
                 Swal.fire({
                     title: 'Enviado com Sucesso!',
